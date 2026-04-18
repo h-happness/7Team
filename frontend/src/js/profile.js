@@ -49,8 +49,14 @@
     const avatarImg = $('avatar-img');
     const avatarLetter = $('avatar-letter');
     const interestsEl = $('interests');
+    const avatarFileNameEl = $('avatar-file-name');
     let interests = [];
     let avatarDataUrl = '';
+
+    function setAvatarFileLabel(text) {
+      if (!avatarFileNameEl) return;
+      avatarFileNameEl.textContent = text || '';
+    }
 
     function updateInterests() {
       renderInterests(interestsEl, interests, (idx) => {
@@ -109,6 +115,8 @@
           interests = Array.isArray(p.interests) ? [...p.interests] : [];
           avatarDataUrl = p.avatarDataUrl || '';
           setAvatar($('avatar-box'), avatarImg, avatarLetter, email, avatarDataUrl);
+          // Avoid showing native "no file chosen" text; show a friendly state instead.
+          setAvatarFileLabel(avatarDataUrl ? 'Аватар уже загружен' : '');
           updateInterests();
           refreshUsers();
         })
@@ -137,14 +145,62 @@
 
     $('avatar-file').addEventListener('change', () => {
       const file = $('avatar-file').files && $('avatar-file').files[0];
-      if (!file) return;
+      if (!file) {
+        setAvatarFileLabel(avatarDataUrl ? 'Аватар уже загружен' : '');
+        return;
+      }
       if (!String(file.type || '').startsWith('image/')) return;
+      setAvatarFileLabel(file.name);
 
+      const msg = $('save-message');
+      msg.textContent = '';
+      msg.className = 'message';
+
+      // Backend currently accepts form-urlencoded; big data URLs can be rejected by server limits.
+      // Compress + resize client-side to keep payload small.
       const reader = new FileReader();
-      reader.onload = () => {
-        const url = String(reader.result || '');
-        setAvatar($('avatar-box'), avatarImg, avatarLetter, email, url);
-        avatarDataUrl = url;
+      reader.onload = async () => {
+        try {
+          const dataUrl = String(reader.result || '');
+
+          const img = new Image();
+          img.onload = () => {
+            const maxSide = 512;
+            const w = img.naturalWidth || img.width || 1;
+            const h = img.naturalHeight || img.height || 1;
+            const scale = Math.min(1, maxSide / Math.max(w, h));
+            const cw = Math.max(1, Math.round(w * scale));
+            const ch = Math.max(1, Math.round(h * scale));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = cw;
+            canvas.height = ch;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) throw new Error('Canvas not supported');
+            ctx.drawImage(img, 0, 0, cw, ch);
+
+            // JPEG drastically reduces size; quality can be tuned if needed.
+            const compressed = canvas.toDataURL('image/jpeg', 0.85);
+            avatarDataUrl = compressed;
+            setAvatar($('avatar-box'), avatarImg, avatarLetter, email, avatarDataUrl);
+
+            // Warn if still too big (rough heuristic).
+            if (avatarDataUrl.length > 1_500_000) {
+              msg.textContent = 'Аватар все еще слишком большой. Попробуй выбрать картинку меньшего размера.';
+              msg.classList.add('error');
+            } else {
+              // No success text here; user saves via "Сохранить".
+              msg.textContent = '';
+            }
+          };
+          img.onerror = () => {
+            throw new Error('Не удалось прочитать изображение');
+          };
+          img.src = dataUrl;
+        } catch (err) {
+          msg.textContent = (err && err.message) ? err.message : 'Не удалось обработать изображение';
+          msg.classList.add('error');
+        }
       };
       reader.readAsDataURL(file);
     });
