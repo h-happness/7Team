@@ -22,15 +22,29 @@
     <div class="auth-card">
         <h2>Регистрация</h2>
 
-        <input type="text" placeholder="Имя">
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Пароль">
+        <form class="auth-form" data-auth-form="register" novalidate>
+            <div class="field">
+                <input id="register-name" name="name" type="text" placeholder="Имя" required autocomplete="name">
+                <div id="register-name-error" class="field-error" aria-live="polite"></div>
+            </div>
 
-        <button class="auth-btn">Зарегистрироваться</button>
+            <div class="field">
+                <input id="register-email" name="email" type="email" placeholder="Email" required autocomplete="email">
+                <div id="register-email-error" class="field-error" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+                <input id="register-password" name="password" type="password" placeholder="Пароль" required autocomplete="new-password">
+                <div id="register-password-error" class="field-error" aria-live="polite"></div>
+            </div>
+
+            <button class="auth-btn" type="submit">Зарегистрироваться</button>
+        </form>
 
         <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
     </div>
 </div>
 
+<script src="../js/auth-validation.js" defer></script>
 </body>
 </html>

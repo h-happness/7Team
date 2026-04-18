@@ -29,6 +29,24 @@
     border: 1px solid #ccc;
 }
 
+.auth-card input.input-error {
+    border-color: #c62828;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
+.auth-card .field {
+    text-align: left;
+}
+
+.auth-card .field-error {
+    margin-top: -6px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    line-height: 1.2;
+    color: #c62828;
+    min-height: 14px;
+}
+
 .auth-btn {
     width: 100%;
     padding: 12px;
