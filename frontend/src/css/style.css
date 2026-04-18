@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  background: #643c11;
+  background: #492308;
   color: white;
   padding: 0.5rem 5% 0.75rem;
   position: fixed;
@@ -31,6 +31,8 @@ header {
   font-weight: 700;
   display: inline-block;
   margin-right: auto;
+  text-decoration: none;
+  color: white;
 }
 
 nav ul {
@@ -86,7 +88,7 @@ nav a:hover {
 
 .btn {
   display: inline-block;
-  background: #654321;
+  background: #492308;
   color: white;
   padding: 1rem 2.5rem;
   text-decoration: none;
