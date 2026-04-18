@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+<header>
+    <a class="logo" href="main.html">Trava</a>
+    <nav>
+        <ul>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="profile-page">
+    <div class="profile-grid">
+        <section class="panel">
+            <h1>Мой профиль</h1>
+            <div class="avatar-wrap">
+                <div class="avatar" id="avatar-box">
+                    <img id="avatar-img" alt="Аватар" style="display:none;">
+                    <span id="avatar-letter"></span>
+                </div>
+                <div class="muted" id="my-email"></div>
+                <div class="field-row" style="width:100%;">
+                    <label for="avatar-file">Аватарка</label>
+                    <input id="avatar-file" type="file" accept="image/*">
+                    <div class="muted">PNG/JPG, хранится только в браузере (localStorage).</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>О себе</h2>
+            <form id="profile-form" novalidate>
+                <div class="field-row">
+                    <label for="display-name">Имя</label>
+                    <input id="display-name" type="text" placeholder="Как вас отображать">
+                </div>
+
+                <div class="field-row">
+                    <label for="bio">Биография</label>
+                    <textarea id="bio" placeholder="Коротко о себе"></textarea>
+                </div>
+
+                <div class="field-row">
+                    <label>Интересы</label>
+                    <div class="inline">
+                        <input id="interest-input" type="text" placeholder="Например: горы, музеи, еда">
+                        <button class="btn-small" id="add-interest" type="button">Добавить</button>
+                    </div>
+                    <div class="tags" id="interests"></div>
+                </div>
+
+                <button class="btn-small" type="submit">Сохранить</button>
+                <div class="message" id="save-message" aria-live="polite"></div>
+            </form>
+        </section>
+
+        <section class="panel" style="grid-column: 1 / -1;">
+            <h2>Пользователи</h2>
+            <div class="muted">Можно открыть чужой профиль и посмотреть интересы/комментарии.</div>
+            <div class="user-list" id="user-list"></div>
+        </section>
+    </div>
+</main>
+
+<script src="../js/session.js" defer></script>
+<script src="../js/profile-api.js" defer></script>
+<script src="../js/profile.js" defer></script>
+</body>
+</html>

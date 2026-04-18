@@ -1,0 +1,6 @@
+.idea/
+
+# Local backend run logs (can get created by running mvnw from shell)
+Desktop/itis trava/demo/backend.log
+Desktop/itis trava/demo/backend-run*.log
+

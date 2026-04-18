@@ -13,6 +13,20 @@ public class User {
     private String password;
     private String role;
 
+    // Profile fields (stored directly on User to keep backend simple)
+    private String displayName;
+
+    @Lob
+    private String bio;
+
+    // Comma-separated interests for minimal schema changes.
+    @Lob
+    private String interests;
+
+    // Data URL (base64) for now; later можно заменить на нормальное хранение файлов.
+    @Lob
+    private String avatarDataUrl;
+
     public Long getId() {
         return id;
     }
@@ -43,5 +57,37 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
+    }
+
+    public String getAvatarDataUrl() {
+        return avatarDataUrl;
+    }
+
+    public void setAvatarDataUrl(String avatarDataUrl) {
+        this.avatarDataUrl = avatarDataUrl;
     }
 }

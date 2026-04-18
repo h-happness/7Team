@@ -14,57 +14,76 @@
         <ul>
             <li><a href="main.html">Главная</a></li>
             <li><a href="catalog.html">Каталог</a></li>
-            <li><a href="login.html">Вход</a></li>
-            <li><a href="register.html">Регистрация</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
         </ul>
     </nav>
 </header>
 
 <main class="catalog">
 
-    <h1 class="title">Популярные направления</h1>
+    <h1 class="title">Поиск мест и маршрутов</h1>
 
-    <div class="cards">
-
-        <!-- Париж -->
-        <div class="card">
-            <div class="card-images">
-                <img src="../../img/paris1.jpg" alt="Париж">
+    <section class="filters" aria-label="Фильтры поиска">
+        <div class="filters-grid">
+            <div class="filter">
+                <label for="q">Поиск</label>
+                <input id="q" type="text" placeholder="Например: музей, паста, парк">
             </div>
-            <div class="card-content">
-                <h2>Париж, Франция</h2>
-                <p>Романтичный город с Эйфелевой башней, музеями и уютными улицами.</p>
-                <span>Лучший сезон: апрель–июнь, сентябрь–октябрь</span>
+
+            <div class="filter">
+                <label for="country">Страна</label>
+                <select id="country">
+                    <option value="">Любая</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="city">Город</label>
+                <select id="city" disabled>
+                    <option value="">Любой</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="type">Тип</label>
+                <select id="type">
+                    <option value="">Любой</option>
+                    <option value="attraction">Достопримечательность</option>
+                    <option value="restaurant">Ресторан</option>
+                    <option value="hotel">Отель</option>
+                    <option value="route">Маршрут</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="rating">Рейтинг от</label>
+                <select id="rating">
+                    <option value="">Любой</option>
+                    <option value="4.8">4.8+</option>
+                    <option value="4.5">4.5+</option>
+                    <option value="4.0">4.0+</option>
+                    <option value="3.5">3.5+</option>
+                </select>
+            </div>
+
+            <div class="filter actions">
+                <button id="reset" type="button" class="btn-inline">Сбросить</button>
             </div>
         </div>
-
-        <!-- Рим -->
-        <div class="card">
-            <div class="card-images">
-                <img src="../../img/rome.jpg" alt="Рим">
-            </div>
-            <div class="card-content">
-                <h2>Рим, Италия</h2>
-                <p>Исторический центр мира с Колизеем и древней архитектурой.</p>
-                <span>Лучший сезон: март–май, сентябрь–октябрь</span>
-            </div>
+        <div class="muted-hint">
+            Сейчас данные берутся из локального списка (фронтенд). Позже можно подключить источник вроде Google Maps API.
         </div>
+    </section>
 
-        <!-- Барселона -->
-        <div class="card">
-            <div class="card-images">
-                <img src="../../img/barcelona1.jpg" alt="Барселона">
-            </div>
-            <div class="card-content">
-                <h2>Барселона, Испания</h2>
-                <p>Город у моря с архитектурой Гауди и яркой атмосферой.</p>
-                <span>Лучший сезон: май–июль, сентябрь</span>
-            </div>
-        </div>
-
-    </div>
+    <div id="results" class="cards"></div>
 
 </main>
 
+<script src="../js/session.js" defer></script>
+<script src="../js/places-provider.js" defer></script>
+<script src="../js/catalog-search.js" defer></script>
 </body>
 </html>

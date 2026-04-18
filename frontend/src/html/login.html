@@ -13,8 +13,10 @@
         <ul>
             <li><a href="main.html">Главная</a></li>
             <li><a href="catalog.html">Каталог</a></li>
-            <li><a href="login.html">Вход</a></li>
-            <li><a href="register.html">Регистрация</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
         </ul>
     </nav>
 </header>
@@ -25,8 +27,8 @@
 
         <form class="auth-form" data-auth-form="login" novalidate>
             <div class="field">
-                <input id="login-username" name="username" type="text" placeholder="Логин" required autocomplete="username">
-                <div id="login-username-error" class="field-error" aria-live="polite"></div>
+                <input id="login-email" name="email" type="email" placeholder="Email" required autocomplete="email">
+                <div id="login-email-error" class="field-error" aria-live="polite"></div>
             </div>
 
             <div class="field">
@@ -35,6 +37,7 @@
             </div>
 
             <button class="auth-btn" type="submit">Войти</button>
+            <div id="login-form-message" class="form-message" aria-live="polite"></div>
         </form>
 
         <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
@@ -42,5 +45,7 @@
 </div>
 
 <script src="../js/auth-validation.js" defer></script>
+<script src="../js/auth-api.js" defer></script>
+<script src="../js/session.js" defer></script>
 </body>
 </html>

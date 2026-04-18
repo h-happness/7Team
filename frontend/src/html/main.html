@@ -13,8 +13,10 @@
         <ul>
             <li><a href="main.html">Главная</a></li>
             <li><a href="catalog.html">Каталог</a></li>
-            <li><a href="login.html">Вход</a></li>
-            <li><a href="register.html">Регистрация</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
         </ul>
     </nav>
 </header>
@@ -78,5 +80,6 @@
         <p>&copy; 2026 Trava. Все права защищены.</p>
     </div>
 </footer>
+<script src="../js/session.js" defer></script>
 </body>
 </html>

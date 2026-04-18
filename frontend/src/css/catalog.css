@@ -46,7 +46,7 @@ nav a {
 
 /* КАТАЛОГ */
 .catalog {
-    padding: 50px 5%;
+    padding: 80px 5% 50px;
 }
 
 .title {
@@ -55,11 +55,73 @@ nav a {
     margin-bottom: 40px;
 }
 
+/* FILTERS */
+.filters {
+    max-width: 1100px;
+    margin: 0 auto 26px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 18px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 0.9fr auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.filter label {
+    display: block;
+    font-weight: 700;
+    color: #4a3220;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.filter input,
+.filter select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d6c2b3;
+    background: #fffdfb;
+    color: #3a2d22;
+}
+
+.filter.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-inline {
+    background: #492308;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-inline:hover {
+    background: #523416;
+}
+
+.muted-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #7a6656;
+}
+
 /* КАРТОЧКИ */
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .card {
@@ -80,6 +142,11 @@ nav a {
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 150px 150px;
     gap: 5px;
+}
+
+.card-images.single {
+    grid-template-columns: 1fr;
+    grid-template-rows: 260px;
 }
 
 .card-images img {
@@ -110,4 +177,43 @@ nav a {
 .card-content span {
     color: #643411;
     font-weight: bold;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #7a6656;
+}
+
+.pill {
+    background: #f5efe6;
+    border: 1px solid #e8d5c4;
+    color: #492308;
+    border-radius: 999px;
+    padding: 4px 10px;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 18px;
+    text-align: center;
+    color: #7a6656;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 1000px) {
+    .filters-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .filter.actions {
+        justify-content: stretch;
+    }
+    .btn-inline {
+        width: 100%;
+    }
 }

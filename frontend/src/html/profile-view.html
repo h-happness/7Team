@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+<header>
+    <a class="logo" href="main.html">Trava</a>
+    <nav>
+        <ul>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="profile-page">
+    <div class="profile-grid">
+        <section class="panel">
+            <h1 id="view-title">Профиль</h1>
+            <div class="avatar-wrap">
+                <div class="avatar" id="view-avatar-box">
+                    <img id="view-avatar-img" alt="Аватар" style="display:none;">
+                    <span id="view-avatar-letter"></span>
+                </div>
+                <div class="muted" id="view-email"></div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Информация</h2>
+            <div class="field-row">
+                <label>Имя</label>
+                <div id="view-name"></div>
+            </div>
+            <div class="field-row">
+                <label>Биография</label>
+                <div id="view-bio" style="white-space: pre-wrap;"></div>
+            </div>
+            <div class="field-row">
+                <label>Интересы</label>
+                <div class="tags" id="view-interests"></div>
+            </div>
+        </section>
+
+        <section class="panel" style="grid-column: 1 / -1;">
+            <h2>Комментарии</h2>
+            <div class="comments" id="comments"></div>
+
+            <form id="comment-form" style="margin-top: 14px; display:none;" novalidate>
+                <div class="field-row">
+                    <label for="comment-text">Оставить комментарий</label>
+                    <textarea id="comment-text" placeholder="Напишите что-нибудь..."></textarea>
+                </div>
+                <button class="btn-small" type="submit">Отправить</button>
+                <div class="message" id="comment-message" aria-live="polite"></div>
+            </form>
+            <div class="muted" id="comment-hint" style="margin-top: 10px;"></div>
+        </section>
+    </div>
+</main>
+
+<script src="../js/session.js" defer></script>
+<script src="../js/profile-api.js" defer></script>
+<script src="../js/profile-view.js" defer></script>
+</body>
+</html>

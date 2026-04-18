@@ -22,6 +22,12 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
+        // Default display name from email for profile pages.
+        if (email != null && email.contains("@")) {
+            user.setDisplayName(email.substring(0, email.indexOf('@')));
+        } else {
+            user.setDisplayName(email);
+        }
 
         return userRepository.save(user);
     }
