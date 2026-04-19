@@ -120,11 +120,13 @@ nav a:hover {
   transition: transform 0.3s, box-shadow 0.3s;
   background: linear-gradient(to bottom right, #e8d5c4, #d6c2b3);
   border: 1px solid #d6c2b3;
+  cursor: pointer;
 }
 
 .feature:hover {
   transform: translateY(-10px);
   box-shadow: 0 10px 30px rgba(101, 67, 33, 0.15);
+  text-decoration: none !important;
 }
 
 .feature h3 {
@@ -184,11 +186,13 @@ footer {
   box-shadow: 0 5px 15px rgba(101, 67, 33, 0.2);
   transition: transform 0.3s, box-shadow 0.3s;
   background: white;
+  cursor: pointer;
 }
 
 .dest-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(101, 67, 33, 0.3);
+  text-decoration: none !important;
 }
 
 .dest-card img {
@@ -221,4 +225,60 @@ footer {
   background: #5c4033;
   color: white;
   font-size: 0.9rem;
+}
+
+.feature-link,
+.dest-card-link {
+    text-decoration: none !important;
+    color: inherit;
+    display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+nav a:hover,
+.btn:hover,
+.country-link:hover {
+  text-decoration: none;
+}
+
+.features {
+  align-items: stretch;
+}
+
+.feature-link {
+  display: flex;
+  text-decoration: none !important;
+  color: inherit;
+  height: 100%;
+}
+
+.feature-link .feature {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.destinations-grid {
+  align-items: stretch;
+}
+
+.dest-card-link {
+  display: flex;
+  text-decoration: none !important;
+  color: inherit;
+  height: 100%;
+}
+
+.dest-card-link .dest-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dest-card-link .dest-info {
+  flex: 1;
 }

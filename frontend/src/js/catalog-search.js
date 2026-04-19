@@ -3,7 +3,6 @@
     attraction: 'Достопримечательность',
     restaurant: 'Ресторан',
     hotel: 'Отель',
-    route: 'Маршрут',
   };
 
   function $(id) {
@@ -23,8 +22,17 @@
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/\"/g, '&quot;')
+      .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+  }
+
+  function createCountryLink(countryName) {
+    if (!countryName) return escapeHtml(countryName);
+    return `<a href="country.html?country=${encodeURIComponent(countryName)}"
+                class="country-link"
+                title="Подробнее о ${escapeHtml(countryName)}">
+                ${escapeHtml(countryName)}
+            </a>`;
   }
 
   function renderCard(place) {
@@ -35,6 +43,9 @@
       .map((src) => `<img src="${escapeHtml(src)}" alt="${escapeHtml(place.name)}">`)
       .join('');
 
+    const countryDisplay = place.country ? createCountryLink(place.country) : '—';
+    const cityDisplay = place.city ? escapeHtml(place.city) : '';
+
     return `
       <div class="card">
         <div class="card-images ${isSingle ? 'single' : ''}">
@@ -43,12 +54,19 @@
         <div class="card-content">
           <h2>${escapeHtml(place.name)}</h2>
           <div class="meta">
-            <span class="pill">${escapeHtml(place.country)}${place.city ? `, ${escapeHtml(place.city)}` : ''}</span>
+            <span class="pill">
+              ${countryDisplay}${cityDisplay ? `, ${cityDisplay}` : ''}
+            </span>
             <span class="pill">${escapeHtml(TYPE_LABEL[place.type] || place.type)}</span>
             <span class="pill">Рейтинг: ${escapeHtml(place.rating)} ${escapeHtml(starString(place.rating))}</span>
           </div>
           <p>${escapeHtml(place.description)}</p>
-          <span>Лучший сезон: ${escapeHtml(place.season || '—')}</span>
+          <div class="card-footer">
+            <span class="season">📅 ${escapeHtml(place.season || 'Круглый год')}</span>
+            <a href="country.html?country=${encodeURIComponent(place.country)}" class="card-country-link">
+              🌍 Все места в ${escapeHtml(place.country)} →
+            </a>
+          </div>
         </div>
       </div>
     `;
@@ -56,7 +74,11 @@
 
   function renderResults(container, items) {
     if (!items || items.length === 0) {
-      container.innerHTML = `<div class="empty">Ничего не найдено. Попробуй изменить фильтры.</div>`;
+      container.innerHTML = `
+        <div class="empty">
+          <p>🔍 Ничего не найдено. Попробуйте изменить фильтры.</p>
+        </div>
+      `;
       return;
     }
     container.innerHTML = items.map(renderCard).join('');
@@ -95,13 +117,59 @@
     };
   }
 
+  function applyUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const typeParam = params.get('type');
+    const countryParam = params.get('country');
+    const cityParam = params.get('city');
+    const qParam = params.get('q');
+
+    if (typeParam) {
+      const typeSelect = $('type');
+      for (let opt of typeSelect.options) {
+        if (opt.value === typeParam) {
+          opt.selected = true;
+          break;
+        }
+      }
+    }
+
+    if (countryParam) {
+      const countrySelect = $('country');
+      for (let opt of countrySelect.options) {
+        if (opt.value === countryParam) {
+          opt.selected = true;
+          break;
+        }
+      }
+      if (window.TravaPlacesProvider) {
+        setCityOptions(window.TravaPlacesProvider);
+      }
+    }
+
+    if (cityParam) {
+      const citySelect = $('city');
+      setTimeout(() => {
+        for (let opt of citySelect.options) {
+          if (opt.value === cityParam) {
+            opt.selected = true;
+            break;
+          }
+        }
+      }, 50);
+    }
+
+    if (qParam) {
+      $('q').value = qParam;
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const provider = window.TravaPlacesProvider;
     if (!provider) return;
 
     const resultsEl = $('results');
 
-    // Fill country list
     provider.listCountries().forEach((c) => {
       const opt = document.createElement('option');
       opt.value = c;
@@ -109,6 +177,7 @@
       $('country').appendChild(opt);
     });
 
+    applyUrlParams();
     setCityOptions(provider);
 
     const runSearch = () => {
@@ -148,7 +217,47 @@
       runSearch();
     });
 
+    function renderCountryQuickFilters(provider) {
+        if (document.querySelector('.quick-countries')) return;
+
+        const filtersSection = document.querySelector('.filters');
+        if (!filtersSection) return;
+
+        const container = document.createElement('div');
+        container.className = 'quick-countries';
+
+        const label = document.createElement('span');
+        label.className = 'quick-countries-label';
+        label.textContent = 'Популярные страны:';
+        container.appendChild(label);
+
+        const countries = provider.listCountries();
+
+        const flags = {};
+
+        countries.slice(0, 6).forEach(country => {
+            const btn = document.createElement('button');
+            btn.className = 'quick-country-btn';
+            btn.innerHTML = `${flags[country] || ''} ${country}`;
+
+            btn.addEventListener('click', () => {
+                const countrySelect = $('country');
+                for (let opt of countrySelect.options) {
+                    if (opt.value === country) {
+                        opt.selected = true;
+                        break;
+                    }
+                }
+                countrySelect.dispatchEvent(new Event('change'));
+            });
+
+            container.appendChild(btn);
+        });
+
+        filtersSection.insertAdjacentElement('afterend', container);
+    }
+
+    renderCountryQuickFilters(provider);
     runSearch();
   });
 })();
-

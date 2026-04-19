@@ -1,0 +1,268 @@
+.country-hero {
+    background: linear-gradient(rgba(73, 35, 8, 0.5), rgba(139, 69, 19, 0.6)),
+                url('../img/placeholder-country.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 40vh;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 0 5%;
+    margin-bottom: 2rem;
+}
+
+.country-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.country-hero .hero-sub {
+    font-size: 1.2rem;
+    opacity: 0.95;
+}
+
+.bio-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: -30px 5% 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.bio-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+}
+
+.bio-photo {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    height: fit-content;
+}
+
+.bio-photo img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-placeholder {
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 2rem;
+}
+
+.bio-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.quick-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+    background: #f9f9f9;
+    padding: 1.2rem 1.8rem;
+    border-radius: 12px;
+    margin: 1.2rem 0;
+}
+
+.fact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fact-icon {
+    width: 40px;
+    height: 40px;
+    background: #e8e8e8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #555;
+}
+
+.fact-text strong {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.fact-text span {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.description {
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: #444;
+}
+
+.seasons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+    margin-top: 1rem;
+}
+
+.season-badge {
+    background: #f0f0f0;
+    padding: 0.4rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.season-badge i {
+    margin-right: 6px;
+    color: #f90;
+}
+
+.sections-title {
+    text-align: center;
+    font-size: 2rem;
+    margin: 2.5rem 5% 1.5rem;
+    color: #333;
+}
+
+.sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0 5% 2rem;
+}
+
+.section-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.section-card:hover {
+    transform: translateY(-5px);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #eee;
+    color: #444;
+}
+
+.section-header i {
+    color: #666;
+    font-size: 1.4rem;
+}
+
+.place-list {
+    list-style: none;
+}
+
+.place-item {
+    display: flex;
+    gap: 12px;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.place-item:last-child {
+    border-bottom: none;
+}
+
+.place-icon {
+    color: #888;
+    width: 20px;
+}
+
+.place-info {
+    flex: 1;
+}
+
+.place-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.place-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 3px;
+}
+
+.status-container {
+    text-align: center;
+    padding: 3rem;
+}
+
+.loader {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-bottom-color: #666;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 5%;
+    border-left: 4px solid #c33;
+}
+
+.back-link {
+    display: inline-block;
+    margin: 0 5% 1rem;
+    color: #666;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #333;
+}
+
+@media (max-width: 700px) {
+    .bio-grid {
+        grid-template-columns: 1fr;
+    }
+    .bio-photo {
+        max-width: 260px;
+        margin: 0 auto;
+    }
+}

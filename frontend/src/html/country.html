@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>О стране</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/catalog.css">
+    <link rel="stylesheet" href="../css/country.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <a class="logo" href="main.html">Trava</a>
+    <nav>
+        <ul>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <a href="catalog.html" class="back-link"><i class="fas fa-arrow-left"></i> Назад к каталогу</a>
+
+    <section class="country-hero" id="countryHero">
+        <h1 id="heroCountryName"></h1>
+        <p class="hero-sub" id="heroSlogan"></p>
+    </section>
+
+    <div id="dynamicContent"></div>
+</main>
+
+<script src="../js/session.js" defer></script>
+<script src="../js/places-provider.js" defer></script>
+<script src="../js/country-page.js" defer></script>
+</body>
+</html>

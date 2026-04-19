@@ -29,48 +29,67 @@
     </section>
 
     <section class="features">
-        <div class="feature">
-            <h3>Страны и города</h3>
-            <p>Популярные страны и их главные города</p>
-        </div>
-        <div class="feature">
-            <h3>Отели</h3>
-            <p>Проверенные варианты размещения с гарантией комфорта</p>
-        </div>
-        <div class="feature">
-            <h3>Рестораны</h3>
-            <p>Местные кухни и гастрономические туры для гурманов и не только</p>
-        </div>
-        <div class="feature">
-            <h3>Достопримечательности</h3>
-            <p>Главные места для посещения — от классики до скрытых жемчужин</p>
-        </div>
+        <a href="catalog.html" class="feature-link">
+            <div class="feature">
+                <h3>Страны и города</h3>
+                <p>Популярные страны и их главные города</p>
+            </div>
+        </a>
+
+        <a href="catalog.html?type=hotel" class="feature-link">
+            <div class="feature">
+                <h3>Отели</h3>
+                <p>Проверенные варианты размещения с гарантией комфорта</p>
+            </div>
+        </a>
+
+        <a href="catalog.html?type=restaurant" class="feature-link">
+            <div class="feature">
+                <h3>Рестораны</h3>
+                <p>Местные кухни и гастрономические туры для гурманов и не только</p>
+            </div>
+        </a>
+
+        <a href="catalog.html?type=attraction" class="feature-link">
+            <div class="feature">
+                <h3>Достопримечательности</h3>
+                <p>Главные места для посещения — от классики до скрытых жемчужин</p>
+            </div>
+        </a>
     </section>
 
     <section class="popular-destinations">
         <h2 class="section-title">Популярные направления</h2>
         <div class="destinations-grid">
-            <div class="dest-card">
-                <img src="../../img/paris1.jpg" alt="Париж" width="400" height="250">
-                <div class="dest-info">
-                    <h3>Париж, Франция</h3>
-                    <p>Город любви и света</p>
+            <a href="country.html?country=Франция" class="dest-card-link">
+                <div class="dest-card">
+                    <img src="../../img/paris1.jpg" alt="Париж" width="400" height="250">
+                    <div class="dest-info">
+                        <h3>Париж, Франция</h3>
+                        <p>Город любви и света</p>
+                    </div>
                 </div>
-            </div>
-            <div class="dest-card">
-                <img src="../../img/rome.jpg" alt="Рим" width="400" height="250">
-                <div class="dest-info">
-                    <h3>Рим, Италия</h3>
-                    <p>Вечный город с тысячелетней историей</p>
+            </a>
+
+            <a href="country.html?country=Италия" class="dest-card-link">
+                <div class="dest-card">
+                    <img src="../../img/rome.jpg" alt="Рим" width="400" height="250">
+                    <div class="dest-info">
+                        <h3>Рим, Италия</h3>
+                        <p>Вечный город с тысячелетней историей</p>
+                    </div>
                 </div>
-            </div>
-            <div class="dest-card">
-                <img src="../../img/barcelona1.jpg" alt="Барселона" width="400" height="250">
-                <div class="dest-info">
-                    <h3>Барселона, Испания</h3>
-                    <p>Архитектура Гауди и средиземноморский колорит</p>
+            </a>
+
+            <a href="country.html?country=Испания" class="dest-card-link">
+                <div class="dest-card">
+                    <img src="../../img/barcelona1.jpg" alt="Барселона" width="400" height="250">
+                    <div class="dest-info">
+                        <h3>Барселона, Испания</h3>
+                        <p>Архитектура Гауди и средиземноморский колорит</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 </main>
@@ -80,6 +99,7 @@
         <p>&copy; 2026 Trava. Все права защищены.</p>
     </div>
 </footer>
+
 <script src="../js/session.js" defer></script>
 </body>
 </html>

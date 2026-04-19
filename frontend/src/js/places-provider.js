@@ -1,12 +1,4 @@
 (() => {
-  /**
-   * Provider interface (for future Google Maps / external APIs):
-   *   provider.search({ q, country, city, type, minRating }) -> Promise<Place[]>
-   *
-   * Place shape:
-   *   { id, name, country, city, type, rating, description, season, images[] }
-   */
-
   const DATA = [
     {
       id: 'paris-attraction-eiffel',
@@ -74,17 +66,6 @@
       season: 'май–октябрь',
       images: ['../../img/barcelona1.jpg'],
     },
-    {
-      id: 'paris-route-day',
-      name: 'Маршрут: Париж за 1 день',
-      country: 'Франция',
-      city: 'Париж',
-      type: 'route',
-      rating: 4.6,
-      description: 'Собор, набережные Сены, Лувр и вечерний Трокадеро.',
-      season: 'весна–осень',
-      images: ['../../img/paris1.jpg', '../../img/main/world.png'],
-    },
   ];
 
   function norm(s) {
@@ -103,16 +84,11 @@
     return hay.includes(norm(q));
   }
 
-  function normalizeType(type) {
-    const t = norm(type);
-    return t;
-  }
-
   function search(params = {}) {
     const q = norm(params.q);
     const country = norm(params.country);
     const city = norm(params.city);
-    const type = normalizeType(params.type);
+    const type = norm(params.type);
     const minRating = params.minRating === '' || typeof params.minRating === 'undefined' || params.minRating === null
       ? null
       : Number(params.minRating);
@@ -126,7 +102,6 @@
       return true;
     });
 
-    // mimic async provider (future API calls)
     return Promise.resolve(result);
   }
 
@@ -140,10 +115,74 @@
     return Array.from(new Set(filtered.map((p) => p.city))).sort((a, b) => a.localeCompare(b));
   }
 
-  window.TravaPlacesProvider = {
-    search,
-    listCountries,
-    listCities,
-  };
-})();
+  function getCountryData(countryName) {
+    const normCountry = norm(countryName);
+    const countryPlaces = DATA.filter(p => norm(p.country) === normCountry);
 
+    if (countryPlaces.length === 0) return Promise.resolve(null);
+
+    const cityCount = {};
+    countryPlaces.forEach(p => { cityCount[p.city] = (cityCount[p.city] || 0) + 1; });
+    const capital = Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+
+    const seasons = [...new Set(countryPlaces.map(p => p.season).filter(Boolean))];
+    const heroImage = countryPlaces.find(p => p.images?.length > 0)?.images[0] || null;
+
+    const attractions = countryPlaces.filter(p => p.type === 'attraction')
+      .map(p => ({ name: p.name, location: p.city, rating: p.rating, description: p.description })).slice(0, 6);
+
+    const cafes = countryPlaces.filter(p => p.type === 'restaurant')
+      .map(p => ({ name: p.name, location: p.city, price: '€€', rating: p.rating })).slice(0, 4);
+
+    const hotels = countryPlaces.filter(p => p.type === 'hotel')
+      .map(p => ({ name: p.name, location: p.city, stars: Math.round(p.rating || 4), rating: p.rating })).slice(0, 4);
+
+    const countryInfo = {
+        'италия': {
+            currency: 'Евро (EUR)',
+            language: 'Итальянский',
+            timezone: 'UTC+1 / UTC+2',
+            description: 'Италия — родина Римской империи и Ренессанса.'
+        },
+        'франция': {
+            currency: 'Евро (EUR)',
+            language: 'Французский',
+            timezone: 'UTC+1 / UTC+2',
+            description: 'Франция — страна романтики, вина и высокой кухни.'
+        },
+        'испания': {
+            currency: 'Евро (EUR)',
+            language: 'Испанский',
+            timezone: 'UTC+1 / UTC+2',
+            description: 'Испания — страна страсти, фламенко и паэльи.'
+        }
+    };
+
+    const info = countryInfo[normCountry] || {
+        currency: '—',
+        language: '—',
+        timezone: '—',
+        description: `${countryName} — прекрасная страна.`
+    };
+
+
+    return Promise.resolve({
+        id: normCountry,
+        name: countryName,
+        capital,
+        currency: info.currency,
+        language: info.language,
+        timezone: info.timezone,
+        description: info.description,
+        popularSeasons: seasons.length ? seasons : ['Круглый год'],
+        heroImage,
+        photo: heroImage,
+        attractions,
+        cafes: cafes.map(c => ({ name: c.name, location: c.location, rating: c.rating })),
+        hotels: hotels.map(h => ({ name: h.name, location: h.location, rating: h.rating })),
+        totalPlaces: countryPlaces.length
+    });
+  }
+
+  window.TravaPlacesProvider = { search, listCountries, listCities, getCountryData };
+})();
