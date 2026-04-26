@@ -27,6 +27,22 @@ public class Review {
 
     public Review() {}
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
     public Long getId() {
         return id;
     }
