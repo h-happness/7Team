@@ -26,7 +26,7 @@ public class ReviewController {
     @PostMapping
     public Review add(@RequestBody ReviewRequest request) {
 
-        User user = userRepo.findById(request.getPlaceId()).orElseThrow();
+        User user = userRepo.findById(request.getUserId()).orElseThrow();
 
         Place place = placeRepo.findById(request.getPlaceId()).orElseThrow();
 
