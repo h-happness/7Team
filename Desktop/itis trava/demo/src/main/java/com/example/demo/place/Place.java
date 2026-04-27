@@ -18,7 +18,6 @@ public class Place {
 
     private double lng;
 
-
     public String getName() {
         return name;
     }
