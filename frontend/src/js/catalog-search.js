@@ -62,9 +62,8 @@
           </div>
           <p>${escapeHtml(place.description)}</p>
           <div class="card-footer">
-            <span class="season">📅 ${escapeHtml(place.season || 'Круглый год')}</span>
             <a href="country.html?country=${encodeURIComponent(place.country)}" class="card-country-link">
-              🌍 Все места в ${escapeHtml(place.country)} →
+              🌍 ${escapeHtml(place.country)}, подробности →
             </a>
           </div>
         </div>
