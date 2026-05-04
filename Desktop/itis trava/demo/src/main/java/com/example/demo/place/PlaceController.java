@@ -11,31 +11,35 @@ import java.util.List;
 @RequestMapping("/places")
 public class PlaceController {
 
-    private final PlaceRepository placeRepo;
+    private final PlaceService placeService;
     private final ReviewRepository reviewRepo;
 
-    public PlaceController(PlaceRepository placeRepo, ReviewRepository reviewRepo) {
+    public PlaceController(PlaceService placeService, ReviewRepository reviewRepo) {
 
-        this.placeRepo = placeRepo;
+        this.placeService = placeService;
         this.reviewRepo = reviewRepo;
     }
 
     @GetMapping
-    public List<Place> gatAll() {
-        return placeRepo.findAll();
+    public List<Place> getAll(@RequestParam(required = false) String country,
+                              @RequestParam(required = false) String city,
+                              @RequestParam(required = false) PlaceType type) {
+        return placeService.getAll(country, city, type);
     }
 
-    @PostMapping
-    public Place add(@RequestBody Place place) {
-        return placeRepo.save(place);
-    }
+
 
     @GetMapping("/{id}")
     public PlaceResponse getOne(@PathVariable Long id) {
-        Place place = placeRepo.findById(id).orElseThrow();
+        Place place = placeService.getById(id);
 
         List<Review> reviews = reviewRepo.findByPlaceId(id);
 
-        return new PlaceResponse(place, reviews);
+        double avg = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0);
+
+        return new PlaceResponse(place, reviews, avg);
     }
 }

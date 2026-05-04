@@ -3,7 +3,6 @@ package com.example.demo.review;
 
 import com.example.demo.entity.User;
 import com.example.demo.place.Place;
-import com.example.demo.place.PlaceRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,9 @@ public class ReviewController {
 
     private final ReviewRepository repo;
     private final UserRepository userRepo;
-    private final PlaceRepository placeRepo;
 
-    public ReviewController(ReviewRepository repo, UserRepository userRepo, PlaceRepository placeRepo) {
+    public ReviewController(ReviewRepository repo, UserRepository userRepo) {
         this.repo = repo;
-        this.placeRepo = placeRepo;
         this.userRepo = userRepo;
     }
 
@@ -28,12 +25,11 @@ public class ReviewController {
 
         User user = userRepo.findById(request.getUserId()).orElseThrow();
 
-        Place place = placeRepo.findById(request.getPlaceId()).orElseThrow();
 
         Review review = new Review();
 
         review.setUser(user);
-        review.setPlace(place);
+        review.setPlaceId(request.getPlaceId());
         review.setText(request.getText());
         review.setRating(request.getRating());
 

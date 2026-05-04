@@ -1,0 +1,996 @@
+{
+  "countries": {
+    "china": {
+      "id": 1,
+      "name": "Китай",
+      "currency": "Китайский юань (CNY)",
+      "capital": {
+        "name": "Пекин",
+        "path": "../../img/countries/china/capital.png"
+      },
+      "timezone": "UTC+8",
+      "language": "Мандаринский китайский",
+      "discription": "Страна с богатым культурным наследием, разнообразными ландшафтами — от пустынь до тропических лесов, а также контрастным сочетанием древних традиций и современных мегаполисов.",
+      "popularSeason": [
+        "апрель-май",
+        "сентябрь-октябрь"
+      ],
+      "cities": ["Пекин", "Шанхай"],
+      "hotels": {
+        "Пекин": {
+          "Bulgari Hotel": {
+            "name": "Bulgari Hotel",
+            "path": "../../img/countries/china/hotels/Пекин/Bulgari Hotel.jpg",
+            "rating": 4.9
+          },
+          "Hilton Beijing Wangfujing": {
+            "name": "Hilton Beijing Wangfujing",
+            "path": "../../img/countries/china/hotels/Пекин/Hilton Beijing Wangfujing.jpg",
+            "rating": 4.7
+          },
+          "Mandarin Oriental Wangfujing Beijing": {
+            "name": "Mandarin Oriental Wangfujing Beijing",
+            "path": "../../img/countries/china/hotels/Пекин/Mandarin Oriental Wangfujing Beijing.jpg",
+            "rating": 4.8
+          }
+        },
+        "Шанхай": {
+          "Fairmont Peace Hotel": {
+            "name": "Fairmont Peace Hotel",
+            "path": "../../img/countries/china/hotels/Шанхай/Fairmont Peace Hotel.jpg",
+            "rating": 4.8
+          },
+          "Mandarin Oriental Pudong": {
+            "name": "Mandarin Oriental Pudong",
+            "path": "../../img/countries/china/hotels/Шанхай/Mandarin Oriental Pudong.jpg",
+            "rating": 4.9
+          },
+          "The Ritz-Carlton Shanghai": {
+            "name": "The Ritz-Carlton Shanghai",
+            "path": "../../img/countries/china/hotels/Шанхай/The Ritz-Carlton Shanghai.jpg",
+            "rating": 4.8
+          }
+        }
+      },
+      "flag": "../../img/countries/china/flag.png",
+      "attractions": {
+        "Пекин": {
+          "Forbidden City": {
+            "name": "Запретный город",
+            "path": "../../img/countries/china/attractions/Пекин/Forbidden City.jpg",
+            "rating": 4.9
+          },
+          "Lama Temple": {
+            "name": "Храм Ламы",
+            "path": "../../img/countries/china/attractions/Пекин/Lama Temple.jpg",
+            "rating": 4.6
+          },
+          "Summer Palace": {
+            "name": "Летний дворец",
+            "path": "../../img/countries/china/attractions/Пекин/Summer Palace.jpg",
+            "rating": 4.8
+          },
+          "Temple of Heaven": {
+            "name": "Храм Неба",
+            "path": "../../img/countries/china/attractions/Пекин/Temple of Heaven.jpg",
+            "rating": 4.7
+          },
+          "The Great Wall": {
+            "name": "Великая Китайская стена",
+            "path": "../../img/countries/china/attractions/Пекин/The Great Wall at Badaling.jpg",
+            "rating": 5.0
+          }
+        },
+        "Шанхай": {
+          "Nanjing Road": {
+            "name": "Нанкинская улица",
+            "path": "../../img/countries/china/attractions/Шанхай/Nanjing Road.jpg",
+            "rating": 4.5
+          },
+          "Shanghai Exhibition Centre": {
+            "name": "Шанхайский выставочный центр",
+            "path": "../../img/countries/china/attractions/Шанхай/Shanghai Exhibition Centre.jpg",
+            "rating": 4.3
+          },
+          "Shanghai Science and Technology Museum": {
+            "name": "Шанхайский музей науки и технологий",
+            "path": "../../img/countries/china/attractions/Шанхай/Shanghai Science and Technology Museum.jpg",
+            "rating": 4.4
+          },
+          "Yu Garden": {
+            "name": "Сад Юйюань",
+            "path": "../../img/countries/china/attractions/Шанхай/Yu Garden.jpg",
+            "rating": 4.7
+          },
+          "Lujiazui": {
+            "name": "Луцзяцзуй",
+            "path": "../../img/countries/china/attractions/Шанхай/Lujiazui.jpg",
+            "rating": 4.6
+          }
+        }
+      },
+      "cafes": {
+        "Пекин": {
+          "Furongji": {
+            "name": "Furongji",
+            "path": "../../img/countries/china/cafes/Пекин/Furongji.jpg",
+            "rating": 4.2
+          },
+          "Siji Minfu Restaurant Peking Roast Duck (Dengshikou)": {
+            "name": "Siji Minfu Restaurant Peking Roast Duck (Dengshikou)",
+            "path": "../../img/countries/china/cafes/Пекин/Siji Minfu Restaurant Peking Roast Duck (Dengshikou).jpg",
+            "rating": 4.8
+          },
+          "TempleRestaurantBeijing": {
+            "name": "TempleRestaurantBeijing",
+            "path": "../../img/countries/china/cafes/Пекин/TempleRestaurantBeijing.jpg",
+            "rating": 4.5
+          }
+        },
+        "Шанхай": {
+          "Starbucks": {
+            "name": "Starbucks",
+            "path": "../../img/countries/china/cafes/Шанхай/Starbucks.jpg",
+            "rating": 4.1
+          },
+          "Thai Gallery Restaurant": {
+            "name": "Thai Gallery Restaurant",
+            "path": "../../img/countries/china/cafes/Шанхай/Thai Gallery Restaurant.jpg",
+            "rating": 4.4
+          },
+          "The House of Roosevelt": {
+            "name": "The House of Roosevelt",
+            "path": "../../img/countries/china/cafes/Шанхай/The House of Roosevelt.jpg",
+            "rating": 4.6
+          }
+        }
+      }
+    },
+    "france": {
+      "id": 2,
+      "name": "Франция",
+      "currency": "Евро (EUR)",
+      "capital": {
+        "name": "Париж",
+        "path": "../../img/countries/france/capital.png"
+      },
+      "timezone": "UTC+1 (CET), UTC+2 (CEST летом)",
+      "language": "Французский",
+      "discription": "Страна с богатым культурным наследием, разнообразными ландшафтами — от Альп до Лазурного берега — и знаменитой кухней. Известна винодельческими регионами и модными бутиками Парижа.",
+      "popularSeason": [
+        "апрель-май",
+        "сентябрь-октябрь"
+      ],
+      "cities": ["Марсель", "Париж"],
+      "hotels": {
+        "Марсель": {
+          "Hôtel Dieu Intercontinental Marseille": {
+            "name": "Hôtel Dieu Intercontinental Marseille",
+            "path": "../../img/countries/france/hotels/Марсель/Hôtel Dieu Intercontinental Marseille.jpg",
+            "rating": 4.8
+          },
+          "Hotel nhow Marseille": {
+            "name": "Hotel nhow Marseille",
+            "path": "../../img/countries/france/hotels/Марсель/Hotel nhow Marseille.jpg",
+            "rating": 4.5
+          }
+        }
+      },
+      "flag": "../../img/countries/france/flag.png",
+      "attractions": {
+        "Париж": {
+          "Tour Eiffel": {
+            "name": "Эйфелева башня",
+            "path": "../../img/countries/france/attractions/Париж/Tour Eiffel.jpg",
+            "rating": 5.0
+          },
+          "Musée du Louvre": {
+            "name": "Лувр",
+            "path": "../../img/countries/france/attractions/Париж/Musée du Louvre.jpg",
+            "rating": 5.0
+          },
+          "Palais Garnier": {
+            "name": "Опера Гарнье",
+            "path": "../../img/countries/france/attractions/Париж/Palais Garnier.jpg",
+            "rating": 4.9
+          },
+          "Panthéon": {
+            "name": "Пантеон",
+            "path": "../../img/countries/france/attractions/Париж/Panthéon.jpg",
+            "rating": 5.0
+          }
+        },
+        "Марсель": {
+          "Basilique Notre-Dame de la Garde": {
+            "name": "Базилика Нотр‑Дам‑де‑ла‑Гард",
+            "path": "../../img/countries/france/attractions/Марсель/Basilique Notre-Dame de la Garde.jpg",
+            "rating": 4.7
+          },
+          "Mucem - Musée des civilisations de l’Europe et de la Méditerranée": {
+            "name": "Музей цивилизаций Европы и Средиземноморья",
+            "path": "../../img/countries/france/attractions/Марсель/Mucem - Musée des civilisations de l’Europe et de la Méditerranée.jpg",
+            "rating": 4.6
+          },
+          "Palais du Pharo": {
+            "name": "Дворец Фаро",
+            "path": "../../img/countries/france/attractions/Марсель/Palais du Pharo.jpg",
+            "rating": 4.4
+          }
+        }
+      },
+      "cafes": {
+        "Париж": {
+          "La Maison du Boulevard": {
+            "name": "La Maison du Boulevard",
+            "path": "../../img/countries/france/cafes/Париж/La Maison du Boulevard.jpg",
+            "rating": 4.6
+          },
+          "Le P'tit Piano": {
+            "name": "Le P'tit Piano",
+            "path": "../../img/countries/france/cafes/Париж/Le P'tit Piano.jpg",
+            "rating": 4.8
+          }
+        },
+        "Марсель": {
+          "Chez Fonfon": {
+            "name": "Chez Fonfon",
+            "path": "../../img/countries/france/cafes/Марсель/Chez Fonfon.png",
+            "rating": 4.7
+          },
+          "Peron Restaurant": {
+            "name": "Peron Restaurant",
+            "path": "../../img/countries/france/cafes/Марсель/Peron Restaurant.png",
+            "rating": 4.5
+          }
+        }
+      }
+    },
+    "italy": {
+      "id": 3,
+      "name": "Италия",
+      "currency": "Евро (EUR)",
+      "capital": {
+        "name": "Рим",
+        "path": "../../img/countries/italy/capital.png"
+      },
+      "timezone": "UTC+1 (CET), UTC+2 (CEST летом)",
+      "language": "Итальянский",
+      "discription": "Страна с древними руинами, живописными озёрами, гастрономическим разнообразием и модными городами.",
+      "popularSeason": [
+        "апрель-июнь",
+        "сентябрь-ноябрь"
+      ],
+      "cities": ["Флоренция", "Милан", "Рим", "Венеция"],
+      "hotels": {
+        "Флоренция": {
+          "Grand Hotel Minerva": {
+            "name": "Grand Hotel Minerva",
+            "path": "../../img/countries/italy/hotels/Флоренция/Grand Hotel Minerva.bmp",
+            "rating": 4.8
+          },
+          "Il Tornabuoni Hotel": {
+            "name": "Il Tornabuoni Hotel",
+            "path": "../../img/countries/italy/hotels/Флоренция/Il Tornabuoni Hotel.bmp",
+            "rating": 4.9
+          },
+          "Ville sull'Arno": {
+            "name": "Ville sull'Arno",
+            "path": "../../img/countries/italy/hotels/Флоренция/Ville sull'Arno.bmp",
+            "rating": 4.7
+          }
+        },
+        "Милан": {
+          "Four Seasons Hotel Milano": {
+            "name": "Four Seasons Hotel Milano",
+            "path": "../../img/countries/italy/hotels/Милан/Four Seasons Hotel Milano.bmp",
+            "rating": 5.0
+          },
+          "Hotel Principe Di Savoia (Dorchester Collection)": {
+            "name": "Hotel Principe Di Savoia (Dorchester Collection)",
+            "path": "../../img/countries/italy/hotels/Милан/Hotel Principe Di Savoia (Dorchester Collection).jpg",
+            "rating": 4.9
+          },
+          "Park Hyatt Milano": {
+            "name": "Park Hyatt Milano",
+            "path": "../../img/countries/italy/hotels/Милан/Park Hyatt Milano.jpg",
+            "rating": 4.8
+          }
+        },
+        "Рим": {
+          "Dharma Boutique Hotel & Spa": {
+            "name": "Dharma Boutique Hotel & Spa",
+            "path": "../../img/countries/italy/hotels/Рим/Dharma Boutique Hotel & Spa.bmp",
+            "rating": 4.6
+          },
+          "Hotel Quirinale": {
+            "name": "Hotel Quirinale",
+            "path": "../../img/countries/italy/hotels/Рим/Hotel Quirinale.bmp",
+            "rating": 4.7
+          },
+          "Singer Palace Hotel Roma": {
+            "name": "Singer Palace Hotel Roma",
+            "path": "../../img/countries/italy/hotels/Рим/Singer Palace Hotel Roma.bmp",
+            "rating": 4.5
+          }
+        },
+        "Венеция": {
+          "Baglioni Hotel Luna": {
+            "name": "Baglioni Hotel Luna",
+            "path": "../../img/countries/italy/hotels/Венеция/Baglioni Hotel Luna.bmp",
+            "rating": 4.8
+          },
+          "Hotel Danieli, a Luxury Collection Hotel": {
+            "name": "Hotel Danieli, a Luxury Collection Hotel",
+            "path": "../../img/countries/italy/hotels/Венеция/Hotel Danieli, a Luxury Collection Hotel.bmp",
+            "rating": 5.0
+          },
+          "Rosa Salva Hotel": {
+            "name": "Rosa Salva Hotel",
+            "path": "../../img/countries/italy/hotels/Венеция/Rosa Salva Hotel.bmp",
+            "rating": 4.4
+          }
+        }
+      },
+      "flag": "../../img/countries/italy/flag.png",
+      "attractions": {
+        "Флоренция": {
+          "Florence Cathedral": {
+            "name": "Флорентийский собор",
+            "path": "../../img/countries/italy/attractions/Флоренция/Florence Cathedral.bmp",
+            "rating": 5.0
+          },
+          "Ponte Vecchio": {
+            "name": "Понте‑Веккьо (Старый мост)",
+            "path": "../../img/countries/italy/attractions/Флоренция/Ponte Vecchio.bmp",
+            "rating": 4.9
+          },
+          "Uffizi": {
+            "name": "Галерея Уффици",
+            "path": "../../img/countries/italy/attractions/Флоренция/Uffizi.bmp",
+            "rating": 4.9
+          }
+        },
+        "Милан": {
+          "Milan Cathedral": {
+            "name": "Миланский собор",
+            "path": "../../img/countries/italy/attractions/Милан/Milan Cathedral.bmp",
+            "rating": 4.8
+          },
+          "Sforza Castle": {
+            "name": "Замок Сфорца",
+            "path": "../../img/countries/italy/attractions/Милан/Sforza Castle.bmp",
+            "rating": 4.7
+          }
+        },
+        "Рим": {
+          "Pantheon": {
+            "name": "Пантеон",
+            "path": "../../img/countries/italy/attractions/Рим/Pantheon.bmp",
+            "rating": 4.9
+          },
+          "The Colosseum": {
+            "name": "Колизей",
+            "path": "../../img/countries/italy/attractions/Рим/The Colosseum.bmp",
+            "rating": 5.0
+          },
+          "The Sistine Chapel": {
+            "name": "Сикстинская капелла",
+            "path": "../../img/countries/italy/attractions/Рим/The Sistine Chapel.bmp",
+            "rating": 4.9
+          },
+          "Vaticano": {
+            "name": "Ватикан",
+            "path": "../../img/countries/italy/attractions/Рим/Vaticano.bmp",
+            "rating": 5.0
+          }
+        },
+        "Венеция": {
+          "Doge's Palace": {
+            "name": "Дворец дожей",
+            "path": "../../img/countries/italy/attractions/Венеция/Doge's Palace.bmp",
+            "rating": 4.8
+          },
+          "Grand Canal": {
+            "name": "Гранд‑канал",
+            "path": "../../img/countries/italy/attractions/Венеция/Grand Canal.bmp",
+            "rating": 4.9
+          },
+          "St Mark's Basilica": {
+            "name": "Базилика Святого Марка",
+            "path": "../../img/countries/italy/attractions/Венеция/St Mark's Basilica.bmp",
+            "rating": 4.9
+          }
+        }
+      },
+      "cafes": {
+        "Флоренция": {
+          "Caffè Gilli": {
+            "name": "Caffè Gilli",
+            "path": "../../img/countries/italy/cafes/Флоренция/Caffè Gilli.bmp",
+            "rating": 4.7
+          },
+          "Ditta Artigianale Via dello Sprone Specialty Coffee": {
+            "name": "Ditta Artigianale Via dello Sprone Specialty Coffee",
+            "path": "../../img/countries/italy/cafes/Флоренция/Ditta Artigianale Via dello Sprone Specialty Coffee.png",
+            "rating": 4.8
+          },
+          "Pasticceria Robiglio": {
+            "name": "Pasticceria Robiglio",
+            "path": "../../img/countries/italy/cafes/Флоренция/Pasticceria Robiglio.bmp",
+            "rating": 4.5
+          }
+        },
+        "Милан": {
+          "Caffè Ambrosiano": {
+            "name": "Caffè Ambrosiano",
+            "path": "../../img/countries/italy/cafes/Милан/Caffè Ambrosiano.bmp",
+            "rating": 4.6
+          },
+          "Pasticceria Marchesi 1824": {
+            "name": "Pasticceria Marchesi 1824",
+            "path": "../../img/countries/italy/cafes/Милан/Pasticceria Marchesi 1824.bmp",
+            "rating": 4.9
+          },
+          "Savini Caffè": {
+            "path": "../../img/countries/italy/cafes/Милан/Savini Caffè.bmp",
+            "name": "Savini Caffè",
+            "rating": 4.8
+          }
+        },
+        "Рим": {
+          "Antico Caffè Greco": {
+            "path": "../../img/countries/italy/cafes/Рим/Antico Caffè Greco.bmp",
+            "name": "Antico Caffè Greco",
+            "rating": 4.8
+          },
+          "Bar del Cappuccino": {
+            "path": "../../img/countries/italy/cafes/Рим/Bar del Cappuccino.bmp",
+            "name": "Bar del Cappuccino",
+            "rating": 4.5
+          },
+          "Caffè Fondi": {
+            "path": "../../img/countries/italy/cafes/Рим/Caffè Fondi.bmp",
+            "name": "Caffè Fondi",
+            "rating": 4.7
+          },
+          "Tazza D’Oro": {
+            "path": "../../img/countries/italy/cafes/Рим/Tazza D’Oro.bmp",
+            "name": "Tazza D’Oro",
+            "rating": 4.9
+          }
+        },
+        "Венеция": {
+          "Caffe Florian": {
+            "path": "../../img/countries/italy/cafes/Венеция/Caffe Florian.bmp",
+            "name": "Caffe Florian",
+            "rating": 4.9
+          }
+        }
+      }
+    },
+    "japan": {
+      "id": 4,
+      "name": "Япония",
+      "currency": "Японская иена (JPY)",
+      "capital": {
+        "name": "Токио",
+        "path": "../../img/countries/japan/capital.png"
+      },
+      "timezone": "UTC+9",
+      "language": "Японский",
+      "discription": "Страна, где гармонично сочетаются высокотехнологичные решения, древняя архитектура и традиции. Здесь можно увидеть современные мегаполисы (Токио, Осака), древние храмы Киото, сады и цветущую сакуру, горы, вулканы и горячие источники. Япония славится кухней, фестивалями и сезонными красотами — от цветения сакуры до красных клёнов.",
+      "popularSeason": [
+        "апрель-май",
+        "сентябрь-ноябрь"
+      ],
+      "cities": ["Осака", "Токио"],
+      "hotels": {
+        "Осака": {
+          "Hotel Universal Port": {
+            "name": "Hotel Universal Port",
+            "path": "../../img/countries/japan/hotels/Осака/Hotel Universal Port.jpg",
+            "rating": 4.7
+          },
+          "Quintessa Hotel Osaka Bay": {
+            "name": "Quintessa Hotel Osaka Bay",
+            "path": "../../img/countries/japan/hotels/Осака/Quintessa Hotel Osaka Bay.jpg",
+            "rating": 4.5
+          },
+          "The Park Front Hotel at Universal Studios Japan": {
+            "name": "The Park Front Hotel at Universal Studios Japan",
+            "path": "../../img/countries/japan/hotels/Осака/The Park Front Hotel at Universal Studios Japan.jpg",
+            "rating": 4.8
+          }
+        },
+        "Токио": {
+          "Hilton Tokyo": {
+            "name": "Hilton Tokyo",
+            "path": "../../img/countries/japan/hotels/Токио/Hilton Tokyo.jpg",
+            "rating": 4.6
+          },
+          "Via Inn Prime Akasaka": {
+            "name": "Via Inn Prime Akasaka",
+            "path": "../../img/countries/japan/hotels/Токио/Via Inn Prime Akasaka.jpg",
+            "rating": 4.3
+          },
+          "Villa Fontaine Grand Tokyo Ariake": {
+            "name": "Villa Fontaine Grand Tokyo Ariake",
+            "path": "../../img/countries/japan/hotels/Токио/Villa Fontaine Grand Tokyo Ariake.jpg",
+            "rating": 4.4
+          }
+        }
+      },
+      "flag": "../../img/countries/japan/flag.png",
+      "attractions": {
+        "Осака": {
+          "Osaka Castle": {
+            "name": "Замок Осака",
+            "path": "../../img/countries/japan/attractions/Осака/Osaka Castle.jpg",
+            "rating": 4.9
+          },
+          "Umeda Sky Building": {
+            "name": "Небоскрёб Умеда Скай",
+            "path": "../../img/countries/japan/attractions/Осака/Umeda Sky Building.jpg",
+            "rating": 4.6
+          },
+          "Universal Studios park": {
+            "name": "Парк Юниверсал Студиос",
+            "path": "../../img/countries/japan/attractions/Осака/Universal Studios park.jpg",
+            "rating": 4.8
+          }
+        },
+        "Токио": {
+          "Meiji Shrine": {
+            "name": "Храм Мэйдзи (Мэйдзи‑дзингу)",
+            "path": "../../img/countries/japan/attractions/Токио/Meiji Shrine.jpg",
+            "rating": 4.9
+          },
+          "Shinjuku Gyoen National Garden": {
+            "name": "Национальный сад Синдзюку‑Гёэн",
+            "path": "../../img/countries/japan/attractions/Токио/Shinjuku Gyoen National Garden.jpg",
+            "rating": 4.7
+          },
+          "Tokyo Imperial Palace": {
+            "name": "Императорский дворец Токио",
+            "path": "../../img/countries/japan/attractions/Токио/Tokyo Imperial Palace.jpg",
+            "rating": 4.8
+          }
+        }
+      },
+      "cafes": {
+        "Осака": {
+          "Kobe Beef WANOMIYA Dotonbori Main Store": {
+            "name": "Kobe Beef WANOMIYA Dotonbori Main Store",
+            "path": "../../img/countries/japan/cafes/Осака/Kobe Beef WANOMIYA Dotonbori Main Store.jpg",
+            "rating": 4.8
+          },
+          "Pokémon Cafe Osaka Shinsaibashi": {
+            "name": "Pokémon Cafe Osaka Shinsaibashi",
+            "path": "../../img/countries/japan/cafes/Осака/Pokémon Cafe Osaka Shinsaibashi.jpg",
+            "rating": 4.6
+          }
+        },
+        "Токио": {
+          "GYOPAO Gyoza Roppongi": {
+            "name": "GYOPAO Gyoza Roppongi",
+            "path": "../../img/countries/japan/cafes/Токио/GYOPAO Gyoza Roppongi.png",
+            "rating": 4.5
+          },
+          "Ninja Tokyo": {
+            "name": "Ninja Tokyo",
+            "path": "../../img/countries/japan/cafes/Токио/Ninja Tokyo.jpg",
+            "rating": 4.7
+          },
+          "Teppanyaki Akasaka": {
+            "name": "Teppanyaki Akasaka",
+            "path": "../../img/countries/japan/cafes/Токио/Teppanyaki Akasaka.jpg",
+            "rating": 4.6
+          }
+        }
+      }
+    },
+    "russia": {
+      "id": 5,
+      "name": "Россия",
+      "currency": "Российский рубль (RUB)",
+      "capital": {
+        "name": "Москва",
+        "path": "../../img/countries/russia/capital.png"
+      },
+      "timezone": "UTC+2 до UTC+13",
+      "language": "Русский",
+      "discription": "Страна с огромным территориальным разнообразием — от арктических пустынь до субтропиков. Здесь можно найти всё: от широколиственных лесов и тайги до вулканов Камчатки и кристально чистого Байкала. В России есть исторические города с богатой архитектурой, этнографические маршруты и возможности для активного отдыха — от горнолыжного спорта до рафтинга.",
+      "popularSeason": "круглый год",
+      "cities": ["Москва", "Санкт-Петербург"],
+      "hotels": {
+        "Москва": {
+          "FortEstate": {
+            "name": "FortEstate",
+            "path": "../../img/countries/russia/hotels/Москва/FortEstate.jpg",
+            "rating": 4.5
+          },
+          "Happy Home": {
+            "name": "Happy Home",
+            "path": "../../img/countries/russia/hotels/Москва/Happy Home.jpg",
+            "rating": 4.2
+          }
+        },
+        "Санкт-Петербург": {
+          "Hovard Club": {
+            "name": "Hovard Club",
+            "path": "../../img/countries/russia/hotels/Санкт-Петербург/Hovard Club.jpg",
+            "rating": 4.4
+          },
+          "Mk Rooms": {
+            "name": "Mk Rooms",
+            "path": "../../img/countries/russia/hotels/Санкт-Петербург/Mk Rooms.jpg",
+            "rating": 4.3
+          }
+        }
+      },
+      "flag": "../../img/countries/russia/flag.png",
+      "attractions": {
+        "Москва": {
+          "Cathedral of Christ the Savior": {
+            "name": "Храм Христа Спасителя",
+            "path": "../../img/countries/russia/attractions/Москва/Cathedral of Christ the Savior.jpg",
+            "rating": 4.9
+          },
+          "Kremlin": {
+            "name": "Московский Кремль",
+            "path": "../../img/countries/russia/attractions/Москва/Kremlin.jpg",
+            "rating": 5.0
+          },
+          "St. Basil's Cathedral": {
+            "name": "Собор Василия Блаженного",
+            "path": "../../img/countries/russia/attractions/Москва/St. Basil's Cathedral.jpg",
+            "rating": 5.0
+          },
+          "The Bolshoi Theatre": {
+            "name": "Большой театр",
+            "path": "../../img/countries/russia/attractions/Москва/The Bolshoi Theatre.jpg",
+            "rating": 4.8
+          },
+          "The State Tretyakov Gallery": {
+            "name": "Государственная Третьяковская галерея",
+            "path": "../../img/countries/russia/attractions/Москва/The State Tretyakov Gallery.jpg",
+            "rating": 4.7
+          }
+        },
+        "Санкт-Петербург": {
+          "Hermitage": {
+            "name": "Эрмитаж",
+            "path": "../../img/countries/russia/attractions/Санкт-Петербург/Hermitage.jpg",
+            "rating": 5.0
+          },
+          "St. Isaac's Cathedral": {
+            "name": "Исаакиевский собор",
+            "path": "../../img/countries/russia/attractions/Санкт-Петербург/St. Isaac's Cathedral.jpg",
+            "rating": 4.8
+          },
+          "The Mariinsky Theatre": {
+            "name": "Мариинский театр",
+            "path": "../../img/countries/russia/attractions/Санкт-Петербург/The Mariinsky Theatre.jpg",
+            "rating": 4.9
+          }
+        }
+      },
+      "cafes": {
+        "Москва": {
+          "Capo dei Capi": {
+            "name": "Capo dei Capi",
+            "path": "../../img/countries/russia/cafes/Москва/Capo dei Capi.jpg",
+            "rating": 4.6
+          },
+          "Zaryadye Gastro Center": {
+            "name": "Гастроцентр «Зарядье»",
+            "path": "../../img/countries/russia/cafes/Москва/Zaryadye Gastro Center.png",
+            "rating": 4.4
+          }
+        },
+        "Санкт-Петербург": {
+          "Gogol": {
+            "name": "Гоголь",
+            "path": "../../img/countries/russia/cafes/Санкт-Петербург/Gogol.jpeg",
+            "rating": 4.5
+          },
+          "all Seasons": {
+            "name": "all Seasons",
+            "path": "../../img/countries/russia/cafes/Санкт-Петербург/all Seasons.jpg",
+            "rating": 4.3
+          }
+        }
+      }
+    },
+    "spain": {
+      "id": 6,
+      "name": "Испания",
+      "currency": "Евро (EUR)",
+      "capital": {
+        "name": "Мадрид",
+        "path": "../../img/countries/spain/capital.png"
+      },
+      "timezone": "UTC+1 (CET), UTC+2 (CEST летом)",
+      "language": "Испанский (кастильский)",
+      "discription": "Страна с тысячами километров пляжей, историческими городами, ночной жизнью и гастрономией.",
+      "popularSeason": [
+        "апрель-июль",
+        "сентябрь-ноябрь"
+      ],
+      "cities": ["Мадрид", "Барселона"],
+      "hotels": {
+        "Мадрид": {
+          "Eurostars Madrid Tower": {
+            "name": "Eurostars Madrid Tower",
+            "path": "../../img/countries/spain/hotels/Мадрид/Eurostars Madrid Tower.jpg",
+            "rating": 4.8
+          },
+          "Four Seasons Hotel Madrid": {
+            "name": "Four Seasons Hotel Madrid",
+            "path": "../../img/countries/spain/hotels/Мадрид/Four Seasons Hotel Madrid.png",
+            "rating": 5.0
+          },
+          "Madrid Marriott Auditorium": {
+            "name": "Madrid Marriott Auditorium",
+            "path": "../../img/countries/spain/hotels/Мадрид/Madrid Marriott Auditorium.jpg",
+            "rating": 4.6
+          }
+        },
+        "Барселона": {
+          "Eurostars Grand Marina": {
+            "name": "Eurostars Grand Marina",
+            "path": "../../img/countries/spain/hotels/Барселона/Eurostars Grand Marina.jpg",
+            "rating": 4.9
+          },
+          "Hilton Barcelona": {
+            "name": "Hilton Barcelona",
+            "path": "../../img/countries/spain/hotels/Барселона/Hilton Barcelona.jpg",
+            "rating": 4.8
+          },
+          "St. Christopher's Inn Hostel Barcelona": {
+            "name": "St. Christopher's Inn Hostel Barcelona",
+            "path": "../../img/countries/spain/hotels/Барселона/St. Christopher's Inn Hostel Barcelona.png",
+            "rating": 4.5
+          }
+        }
+      },
+      "flag": "../../img/countries/spain/flag.png",
+      "attractions": {
+        "Мадрид": {
+          "Museo Banksy Madrid": {
+            "name": "Музей в Мадриде",
+            "path": "../../img/countries/spain/attractions/Мадрид/Museo Banksy Madrid.png",
+            "rating": 4.7
+          },
+          "Prado Museum": {
+            "name": "Музей Прадо",
+            "path": "../../img/countries/spain/attractions/Мадрид/Museo Nacional del Prado.png",
+            "rating": 4.9
+          },
+          "Palacio Real de Madrid": {
+            "name": "Королевский дворец в Мадриде",
+            "path": "../../img/countries/spain/attractions/Мадрид/Palacio Real de Madrid.png",
+            "rating": 4.7
+          },
+          "Puerta de Alcalá": {
+            "name": "Ворота Алькала",
+            "path": "../../img/countries/spain/attractions/Мадрид/Puerta de Alcalá.jpg",
+            "rating": 4.5
+          }
+        },
+        "Барселона": {
+          "Basílica de la Sagrada Família": {
+            "name": "Храм Святого Семейства",
+            "path": "../../img/countries/spain/attractions/Барселона/Basílica de la Sagrada Família.png",
+            "rating": 5.0
+          },
+          "La Pedrera - Casa Milà": {
+            "name": "Каса Мила",
+            "path": "../../img/countries/spain/attractions/Барселона/La Pedrera - Casa Milà.png",
+            "rating": 4.8
+          },
+          "Spotify Camp Nou": {
+            "name": "Spotify стадион",
+            "path": "../../img/countries/spain/attractions/Барселона/Spotify Camp Nou.jpg",
+            "rating": 4.9
+          }
+        }
+      },
+      "cafes": {
+        "Мадрид": {
+          "Azotea Cibeles": {
+            "name": "Azotea Cibeles",
+            "path": "../../img/countries/spain/cafes/Мадрид/Azotea Cibeles.jpg",
+            "rating": 4.8
+          },
+          "Juana La Loca": {
+            "name": "Juana La Loca",
+            "path": "../../img/countries/spain/cafes/Мадрид/Juana La Loca.jpg",
+            "rating": 4.7
+          },
+          "Restaurante Botín": {
+            "name": "Restaurante Botín",
+            "path": "../../img/countries/spain/cafes/Мадрид/Restaurante Botín.jpg",
+            "rating": 4.6
+          }
+        },
+        "Барселона": {
+          "El Nacional": {
+            "name": "El Nacional",
+            "path": "../../img/countries/spain/cafes/Барселона/El Nacional.jpg",
+            "rating": 4.7
+          },
+          "El Tribut": {
+            "name": "El Tribut",
+            "path": "../../img/countries/spain/cafes/Барселона/El Tribut.jpg",
+            "rating": 4.5
+          },
+          "Shôko": {
+            "name": "Shôko",
+            "path": "../../img/countries/spain/cafes/Барселона/Shôko.png",
+            "rating": 4.4
+          }
+        }
+      }
+    },
+    "usa": {
+      "id": 7,
+      "name": "Соединённые Штаты Америки",
+      "currency": "Доллар США (USD)",
+      "capital": {
+        "name": "Вашингтон, округ Колумбия",
+        "path": "../../img/countries/usa/capital.png"
+      },
+      "timezone": "UTC−5 до UTC−10",
+      "language": "Английский (фактически)",
+      "discription": "Огромная страна с невероятным разнообразием ландшафтов: от небоскрёбов Нью‑Йорка и пляжей Майами до национальных парков, каньонов, пустынь и заснеженных вершин Скалистых гор. Здесь есть всё: культурные столицы, технологические хабы, южные плантации и ковбойские ранчо.",
+      "popularSeason": "круглый год",
+      "cities": ["Лос Анджелес", "Нью-Йорк", "Вашингтон"],
+      "hotels": {
+        "Лос Анджелес": {
+          "Freehand Los Angeles": {
+            "name": "Freehand Los Angeles",
+            "path": "../../img/countries/usa/hotels/Лос Анджелес/Freehand Los Angeles.jpg",
+            "rating": 4.4
+          },
+          "Lumea by the Sea Long Beach Convention Center": {
+            "name": "Lumea by the Sea Long Beach Convention Center",
+            "path": "../../img/countries/usa/hotels/Лос Анджелес/Lumea by the Sea Long Beach Convention Center.jpg",
+            "rating": 4.6
+          },
+          "The Metric Hotel": {
+            "name": "The Metric Hotel",
+            "path": "../../img/countries/usa/hotels/Лос Анджелес/The Metric Hotel.jpg",
+            "rating": 4.5
+          }
+        },
+        "Нью-Йорк": {
+          "Pestana Park Avenue": {
+            "name": "Pestana Park Avenue",
+            "path": "../../img/countries/usa/hotels/Нью-Йорк/Pestana Park Avenue.jpg",
+            "rating": 4.7
+          },
+          "The One Boutique Hotel": {
+            "name": "The One Boutique Hotel",
+            "path": "../../img/countries/usa/hotels/Нью-Йорк/The One Boutique Hotel.jpg",
+            "rating": 4.5
+          },
+          "The Wall Street Hotel": {
+            "name": "The Wall Street Hotel",
+            "path": "../../img/countries/usa/hotels/Нью-Йорк/The Wall Street Hotel.jpg",
+            "rating": 4.8
+          }
+        },
+        "Вашингтон": {
+          "Four Seasons Hotel Washington": {
+            "name": "Four Seasons Hotel Washington",
+            "path": "../../img/countries/usa/hotels/Вашингтон/Four Seasons Hotel Washington.jpg",
+            "rating": 5.0
+          },
+          "Waldorf Astoria Washington DC": {
+            "name": "Waldorf Astoria Washington DC",
+            "path": "../../img/countries/usa/hotels/Вашингтон/Waldorf Astoria Washington DC.png",
+            "rating": 4.9
+          }
+        }
+      },
+      "flag": "../../img/countries/usa/flag.png",
+      "attractions": {
+        "Лос Анджелес": {
+          "Los Angeles County Museum of Art": {
+            "name": "Музей искусств округа Лос‑Анджелес",
+            "path": "../../img/countries/usa/attractions/Лос Анджелес/Los Angeles County Museum of Art.jpg",
+            "rating": 4.5
+          },
+          "Nethercutt Museum": {
+            "name": "Музей Нетеркатта",
+            "path": "../../img/countries/usa/attractions/Лос Анджелес/Nethercutt Museum.jpg",
+            "rating": 4.3
+          }
+        },
+        "Нью-Йорк": {
+          "Alice Austen House": {
+            "name": "Дом Алисы Остен",
+            "path": "../../img/countries/usa/attractions/Нью-Йорк/Alice Austen House.jpg",
+            "rating": 4.2
+          },
+          "Statue of Liberty": {
+            "name": "Статуя Свободы",
+            "path": "../../img/countries/usa/attractions/Нью-Йорк/Statue of Liberty.jpg",
+            "rating": 5.0
+          },
+          "Times Square": {
+            "name": "Таймс‑сквер",
+            "path": "../../img/countries/usa/attractions/Нью-Йорк/Times Square.jpg",
+            "rating": 4.7
+          }
+        },
+        "Вашингтон": {
+          "Lincoln Memorial": {
+            "name": "Мемориал Линкольна",
+            "path": "../../img/countries/usa/attractions/Вашингтон/Lincoln Memorial.png",
+            "rating": 4.9
+          },
+          "The White House": {
+            "name": "Белый дом",
+            "path": "../../img/countries/usa/attractions/Вашингтон/The White House.jpg",
+            "rating": 4.8
+          },
+          "Washington National Cathedral": {
+            "name": "Национальный собор Вашингтона",
+            "path": "../../img/countries/usa/attractions/Вашингтон/Washington National Cathedral.jpg",
+            "rating": 4.6
+          }
+        }
+      },
+      "cafes": {
+        "Лос Анджелес": {
+          "Bottega Louie": {
+            "name": "Bottega Louie",
+            "path": "../../img/countries/usa/cafes/Лос Анджелес/Bottega Louie.jpg",
+            "rating": 4.7
+          },
+          "Girl & the Goat Los Angeles": {
+            "name": "Girl & the Goat Los Angeles",
+            "path": "../../img/countries/usa/cafes/Лос Анджелес/Girl & the Goat Los Angeles.jpg",
+            "rating": 4.8
+          }
+        },
+        "Нью-Йорк": {
+          "1803 NYC": {
+            "name": "1803 NYC",
+            "path": "../../img/countries/usa/cafes/Нью-Йорк/1803 NYC.jpg",
+            "rating": 4.5
+          },
+          "AMALFI Rooftop by Birreria": {
+            "name": "AMALFI Rooftop by Birreria",
+            "path": "../../img/countries/usa/cafes/Нью-Йорк/AMALFI Rooftop by Birreria.jpg",
+            "rating": 4.6
+          },
+          "Broadway Lounge": {
+            "name": "Broadway Lounge",
+            "path": "../../img/countries/usa/cafes/Нью-Йорк/Broadway Lounge.jpg",
+            "rating": 4.4
+          }
+        },
+        "Вашингтон": {
+          "Old Ebbitt Grill": {
+            "name": "Old Ebbitt Grill",
+            "path": "../../img/countries/usa/cafes/Вашингтон/Old Ebbitt Grill.png",
+            "rating": 4.7
+          },
+          "Oyamel": {
+            "name": "Oyamel",
+            "path": "../../img/countries/usa/cafes/Вашингтон/Oyamel.jpg",
+            "rating": 4.6
+          },
+          "Whiskey Charlie Rooftop Bar": {
+            "name": "Whiskey Charlie Rooftop Bar",
+            "path": "../../img/countries/usa/cafes/Вашингтон/Whiskey Charlie Rooftop Bar.jpg",
+            "rating": 4.5
+          }
+        }
+      }
+    }
+  }
+}

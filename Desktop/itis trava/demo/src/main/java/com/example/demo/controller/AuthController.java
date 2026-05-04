@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthRequest;
 import com.example.demo.service.UserService;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
@@ -23,19 +24,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestParam String email,
-                         @RequestParam String password) {
-        return userService.register(email, password);
+    public User register(@RequestBody AuthRequest request) {
+        return userService.register(request.email, request.password);
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
+    public String login(@RequestBody AuthRequest request) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(request.email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (passwordEncoder.matches(request.password, user.getPassword())) {
             return "Login successful";
         } else {
             throw new RuntimeException("Wrong password");

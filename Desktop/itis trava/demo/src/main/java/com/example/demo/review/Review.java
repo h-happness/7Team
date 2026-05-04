@@ -3,6 +3,7 @@ package com.example.demo.review;
 
 import com.example.demo.entity.User;
 import com.example.demo.place.Place;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,8 +23,7 @@ public class Review {
     @ManyToOne
     private User user;
 
-    @ManyToOne
-    private Place place;
+    private Long placeId;
 
     public Review() {}
 
@@ -39,9 +39,6 @@ public class Review {
         this.user = user;
     }
 
-    public void setPlace(Place place) {
-        this.place = place;
-    }
 
     public Long getId() {
         return id;
@@ -55,8 +52,12 @@ public class Review {
         return rating;
     }
 
-    public Place getPlace() {
-        return place;
+    public Long getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Long placeId) {
+        this.placeId = placeId;
     }
 
     public User getUser() {
