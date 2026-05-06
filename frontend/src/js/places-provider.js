@@ -1,188 +1,209 @@
-(() => {
-  const DATA = [
-    {
-      id: 'paris-attraction-eiffel',
-      name: 'Эйфелева башня',
-      country: 'Франция',
-      city: 'Париж',
-      type: 'attraction',
-      rating: 4.8,
-      description: 'Главный символ Парижа и одна из самых узнаваемых достопримечательностей мира.',
-      season: 'апрель–июнь, сентябрь–октябрь',
-      images: ['../../img/paris1.jpg'],
-    },
-    {
-      id: 'rome-attraction-colosseum',
-      name: 'Колизей',
-      country: 'Италия',
-      city: 'Рим',
-      type: 'attraction',
-      rating: 4.7,
-      description: 'Древний амфитеатр и сердце античного Рима.',
-      season: 'март–май, сентябрь–октябрь',
-      images: ['../../img/rome.jpg'],
-    },
-    {
-      id: 'barcelona-attraction-sagrada',
-      name: 'Саграда Фамилия',
-      country: 'Испания',
-      city: 'Барселона',
-      type: 'attraction',
-      rating: 4.7,
-      description: 'Базилика Гауди с уникальной архитектурой и атмосферой.',
-      season: 'май–июль, сентябрь',
-      images: ['../../img/barcelona1.jpg'],
-    },
-    {
-      id: 'paris-restaurant-bistro',
-      name: 'Bistro du Quartier',
-      country: 'Франция',
-      city: 'Париж',
-      type: 'restaurant',
-      rating: 4.5,
-      description: 'Уютное бистро с классическими французскими блюдами.',
-      season: 'круглый год',
-      images: ['../../img/paris1.jpg'],
-    },
-    {
-      id: 'rome-restaurant-trattoria',
-      name: 'Trattoria Roma',
-      country: 'Италия',
-      city: 'Рим',
-      type: 'restaurant',
-      rating: 4.4,
-      description: 'Паста, пицца и итальянская классика в центре города.',
-      season: 'круглый год',
-      images: ['../../img/rome.jpg'],
-    },
-    {
-      id: 'barcelona-hotel-mar',
-      name: 'Hotel Mar',
-      country: 'Испания',
-      city: 'Барселона',
-      type: 'hotel',
-      rating: 4.3,
-      description: 'Комфортный отель рядом с морем и историческим центром.',
-      season: 'май–октябрь',
-      images: ['../../img/barcelona1.jpg'],
-    },
-  ];
+let DATA = [];
+let COUNTRY_INFO = {};
 
-  function norm(s) {
-    return String(s || '').trim().toLowerCase();
-  }
+async function loadData() {
+  try {
+    console.log('Начинаем загрузку JSON...');
+    const response = await fetch('../json/DateBase.json');
 
-  function matchesText(place, q) {
-    if (!q) return true;
-    const hay = [
-      place.name,
-      place.country,
-      place.city,
-      place.type,
-      place.description,
-    ].map(norm).join(' ');
-    return hay.includes(norm(q));
-  }
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
 
-  function search(params = {}) {
-    const q = norm(params.q);
-    const country = norm(params.country);
-    const city = norm(params.city);
-    const type = norm(params.type);
-    const minRating = params.minRating === '' || typeof params.minRating === 'undefined' || params.minRating === null
-      ? null
-      : Number(params.minRating);
+    const jsonData = await response.json();
+    DATA = [];
+    COUNTRY_INFO = jsonData.countries || {};
 
-    const result = DATA.filter((p) => {
-      if (country && norm(p.country) !== country) return false;
-      if (city && norm(p.city) !== city) return false;
-      if (type && norm(p.type) !== type) return false;
-      if (minRating !== null && Number(p.rating || 0) < minRating) return false;
-      if (!matchesText(p, q)) return false;
-      return true;
+    Object.keys(COUNTRY_INFO).forEach(countryKey => {
+      const country = COUNTRY_INFO[countryKey];
+
+      // Извлекаем отели
+      if (country.hotels) {
+        Object.keys(country.hotels).forEach(cityKey => {
+          const cityHotels = country.hotels[cityKey];
+          Object.keys(cityHotels).forEach(hotelKey => {
+            const hotel = cityHotels[hotelKey];
+            DATA.push({
+              id: `${countryKey}-hotel-${hotelKey}`,
+              name: hotel.name,
+              country: country.name,
+              city: cityKey,
+              type: 'hotel',
+              rating: hotel.rating,
+              description: `Отель в ${cityKey}, ${country.name}`,
+              season: 'Круглый год',
+              images: [hotel.path]
+            });
+          });
+        });
+      }
+
+      // Извлекаем достопримечательности
+      if (country.attractions) {
+        Object.keys(country.attractions).forEach(cityKey => {
+          const cityAttractions = country.attractions[cityKey];
+          Object.keys(cityAttractions).forEach(attractionKey => {
+            const attraction = cityAttractions[attractionKey];
+            DATA.push({
+              id: `${countryKey}-attraction-${attractionKey}`,
+              name: attraction.name,
+              country: country.name,
+              city: cityKey,
+              type: 'attraction',
+              rating: attraction.rating,
+              description: `Достопримечательность в ${cityKey}, ${country.name}`,
+              season: 'Круглый год',
+              images: [attraction.path]
+            });
+          });
+        });
+      }
+
+      // Извлекаем кафе/рестораны
+      if (country.cafes) {
+        Object.keys(country.cafes).forEach(cityKey => {
+          const cityCafes = country.cafes[cityKey];
+          Object.keys(cityCafes).forEach(cafeKey => {
+            const cafe = cityCafes[cafeKey];
+            DATA.push({
+              id: `${countryKey}-cafe-${cafeKey}`,
+              name: cafe.name,
+              country: country.name,
+              city: cityKey,
+              type: 'restaurant',
+              rating: cafe.rating,
+              description: `Ресторан/кафе в ${cityKey}, ${country.name}`,
+              season: 'Круглый год',
+              images: [cafe.path]
+            });
+          });
+        });
+      }
     });
 
-    return Promise.resolve(result);
+    console.log('Данные успешно загружены:', {
+      totalPlaces: DATA.length,
+      countries: Object.keys(COUNTRY_INFO),
+      samplePlace: DATA[0] || 'Нет мест для примера'
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки данных:', error);
+    DATA = [];
+    COUNTRY_INFO = {};
   }
-
-  function listCountries() {
-    return Array.from(new Set(DATA.map((p) => p.country))).sort((a, b) => a.localeCompare(b));
-  }
-
-  function listCities(country) {
-    const c = norm(country);
-    const filtered = c ? DATA.filter((p) => norm(p.country) === c) : DATA;
-    return Array.from(new Set(filtered.map((p) => p.city))).sort((a, b) => a.localeCompare(b));
-  }
-
-  function getCountryData(countryName) {
-    const normCountry = norm(countryName);
-    const countryPlaces = DATA.filter(p => norm(p.country) === normCountry);
-
-    if (countryPlaces.length === 0) return Promise.resolve(null);
-
-    const cityCount = {};
-    countryPlaces.forEach(p => { cityCount[p.city] = (cityCount[p.city] || 0) + 1; });
-    const capital = Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
-
-    const seasons = [...new Set(countryPlaces.map(p => p.season).filter(Boolean))];
-    const heroImage = countryPlaces.find(p => p.images?.length > 0)?.images[0] || null;
-
-    const attractions = countryPlaces.filter(p => p.type === 'attraction')
-      .map(p => ({ name: p.name, location: p.city, rating: p.rating, description: p.description })).slice(0, 6);
-
-    const cafes = countryPlaces.filter(p => p.type === 'restaurant')
-      .map(p => ({ name: p.name, location: p.city, price: '€€', rating: p.rating })).slice(0, 4);
-
-    const hotels = countryPlaces.filter(p => p.type === 'hotel')
-      .map(p => ({ name: p.name, location: p.city, stars: Math.round(p.rating || 4), rating: p.rating })).slice(0, 4);
-
-    const countryInfo = {
-        'италия': {
-            currency: 'Евро (EUR)',
-            language: 'Итальянский',
-            timezone: 'UTC+1 / UTC+2',
-            description: 'Италия — родина Римской империи и Ренессанса.'
-        },
-        'франция': {
-            currency: 'Евро (EUR)',
-            language: 'Французский',
-            timezone: 'UTC+1 / UTC+2',
-            description: 'Франция — страна романтики, вина и высокой кухни.'
-        },
-        'испания': {
-            currency: 'Евро (EUR)',
-            language: 'Испанский',
-            timezone: 'UTC+1 / UTC+2',
-            description: 'Испания — страна страсти, фламенко и паэльи.'
-        }
-    };
-
-    const info = countryInfo[normCountry] || {
-        currency: '—',
-        language: '—',
-        timezone: '—',
-        description: `${countryName} — прекрасная страна.`
-    };
+}
 
 
-    return Promise.resolve({
-        id: normCountry,
-        name: countryName,
-        capital,
-        currency: info.currency,
-        language: info.language,
-        timezone: info.timezone,
-        description: info.description,
-        popularSeasons: seasons.length ? seasons : ['Круглый год'],
-        heroImage,
-        photo: heroImage,
-        attractions,
-        cafes: cafes.map(c => ({ name: c.name, location: c.location, rating: c.rating })),
-        hotels: hotels.map(h => ({ name: h.name, location: h.location, rating: h.rating })),
-        totalPlaces: countryPlaces.length
+function norm(s) {
+  return String(s || '').trim().toLowerCase();
+}
+
+function matchesText(place, q) {
+  if (!q) return true;
+  const hay = [place.name, place.country, place.city, place.type, place.description].map(norm).join(' ');
+  return hay.includes(norm(q));
+}
+
+async function search(params = {}) {
+  await loadData(); // Загружаем данные перед поиском
+
+  const q = norm(params.q);
+  const country = norm(params.country);
+  const city = norm(params.city);
+  const type = norm(params.type);
+  const minRating = params.minRating ? Number(params.minRating) : null;
+
+  const result = DATA.filter((p) => {
+    if (country && norm(p.country) !== country) return false;
+    if (city && norm(p.city) !== city) return false;
+    if (type && norm(p.type) !== type) return false;
+    if (minRating !== null && Number(p.rating || 0) < minRating) return false;
+    if (!matchesText(p, q)) return false;
+    return true;
+  });
+
+  return result;
+}
+
+function listCountries() {
+  return Object.keys(COUNTRY_INFO).sort((a, b) => a.localeCompare(b));
+}
+
+function listCities(country) {
+  const c = norm(country);
+  const filtered = c ? DATA.filter((p) => norm(p.country) === c) : DATA;
+  return Array.from(new Set(filtered.map((p) => p.city))).sort((a, b) => a.localeCompare(b));
+}
+
+async function getCountryData(countryName) {
+  await loadData();
+
+  const countryInfo = Object.values(COUNTRY_INFO).find(c => c.name === countryName);
+  if (!countryInfo) return null;
+
+  // Извлекаем отели для этой страны
+  const hotels = [];
+  if (countryInfo.hotels) {
+    Object.keys(countryInfo.hotels).forEach(cityKey => {
+      const cityHotels = countryInfo.hotels[cityKey];
+      Object.keys(cityHotels).forEach(hotelKey => {
+        const hotel = cityHotels[hotelKey];
+        hotels.push({
+          name: hotel.name,
+          location: cityKey,
+          rating: hotel.rating
+        });
+      });
     });
   }
 
-  window.TravaPlacesProvider = { search, listCountries, listCities, getCountryData };
-})();
+  // Извлекаем достопримечательности
+  const attractions = [];
+  if (countryInfo.attractions) {
+    Object.keys(countryInfo.attractions).forEach(cityKey => {
+      const cityAttractions = countryInfo.attractions[cityKey];
+      Object.keys(cityAttractions).forEach(attractionKey => {
+        const attraction = cityAttractions[attractionKey];
+        attractions.push({
+          name: attraction.name,
+          location: cityKey,
+          rating: attraction.rating
+        });
+      });
+    });
+  }
+
+  // Извлекаем кафе/рестораны
+  const cafes = [];
+  if (countryInfo.cafes) {
+    Object.keys(countryInfo.cafes).forEach(cityKey => {
+      const cityCafes = countryInfo.cafes[cityKey];
+      Object.keys(cityCafes).forEach(cafeKey => {
+        const cafe = cityCafes[cafeKey];
+        cafes.push({
+          name: cafe.name,
+          location: cityKey,
+          rating: cafe.rating
+        });
+      });
+    });
+  }
+
+  return {
+    name: countryInfo.name,
+    capital: countryInfo.capital?.name || '—',
+    currency: countryInfo.currency || '—',
+    language: countryInfo.language || '—',
+    timezone: countryInfo.timezone || '—',
+    description: countryInfo.discription || 'Информация уточняется.',
+    popularSeasons: countryInfo.popularSeason || ['Круглый год'],
+    heroImage: countryInfo.flag || null,
+    photo: countryInfo.capital?.path || null,
+    hotels: hotels,
+    attractions: attractions,
+    cafes: cafes,
+    totalPlaces: hotels.length + attractions.length + cafes.length
+  };
+}
+
+window.TravaPlacesProvider = { search, listCountries, listCities, getCountryData };

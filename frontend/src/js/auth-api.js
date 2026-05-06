@@ -12,19 +12,18 @@
     if (kind) el.classList.add(kind);
   }
 
-  async function postFormUrlencoded(path, params) {
-    const body = new URLSearchParams(params);
+  async function postFormJson(path, params) {
+    const body = JSON.stringify(params);
     let res;
     try {
       res = await fetch(`${API_BASE}${path}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Content-Type': 'application/json;charset=UTF-8',
         },
         body,
       });
     } catch (e) {
-      // Typically network/CORS. We don't touch backend, so suggest local proxy server.
       throw new Error(
         'Не удалось подключиться к бэкенду. Проверь, что он запущен на http://localhost:8080'
       );
@@ -78,7 +77,7 @@
       disableForm(form, true);
 
       try {
-        await postFormUrlencoded('/auth/login', { email, password });
+        await postFormJson('/auth/login', { email, password });
         localStorage.setItem('trava_email', email);
         window.location.href = 'main.html';
       } catch (err) {
@@ -104,7 +103,7 @@
 
       try {
         // Backend uses only email/password, but extra params are harmless.
-        await postFormUrlencoded('/auth/register', { name, email, password });
+        await postFormJson('/auth/register', { name, email, password });
         localStorage.setItem('trava_email', email);
         window.location.href = 'login.html?registered=1';
       } catch (err) {
