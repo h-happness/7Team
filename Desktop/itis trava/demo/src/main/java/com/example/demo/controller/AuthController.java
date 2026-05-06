@@ -3,8 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.service.UserService;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -40,5 +43,11 @@ public class AuthController {
         } else {
             throw new RuntimeException("Wrong password");
         }
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleError(RuntimeException e) {
+        return e.getMessage();
     }
 }
