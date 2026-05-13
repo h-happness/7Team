@@ -19,7 +19,18 @@ public class Place {
     @Enumerated(EnumType.STRING)
     private PlaceType type;
     private double rating;
+    @Lob
     private String image;
+
+    private boolean userAdded = false;
+
+    public boolean isUserAdded() {
+        return userAdded;
+    }
+
+    public void setUserAdded(boolean userAdded) {
+        this.userAdded = userAdded;
+    }
 
 
     public String getImage() {

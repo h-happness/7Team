@@ -88,7 +88,7 @@
           <div style="color:#492308; font-size:13px; margin-top:8px;">
             Нажмите чтобы посмотреть отзывы ▼
           </div>
-          ${window._isAdmin ? `
+          ${window._isAdmin && place.userAdded ? `
           <button onclick="deletePlace(${place.id})" 
             style="margin-top:8px; background:#c62828; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:13px;">
             Удалить место
@@ -168,6 +168,13 @@
       console.log('reviews:', reviews);
       
       list.innerHTML = renderReviews(reviews, placeId);
+
+      const placeRes = await fetch(`http://localhost:8080/places/${placeId}`);
+      const placeData = await placeRes.json();
+      const ratingPill = document.querySelector(`#place-card-${placeId} .pill:nth-child(3)`);
+      if (ratingPill) {
+          ratingPill.textContent = `Рейтинг: ${placeData.place.rating} ${starString(placeData.place.rating)}`;
+      }
 
       document.getElementById(`review-text-${placeId}`).value = '';
       msg.textContent = 'Отзыв добавлен!';
@@ -252,7 +259,11 @@
       runSearch();
     });
 
+
+    window._runSearch = runSearch;
     runSearch();
+
+    
   });
   // Проверяем роль при загрузке
 async function checkAdminRole() {
@@ -290,12 +301,128 @@ window.deletePlace = async function(placeId) {
     const email = localStorage.getItem('trava_email');
     if (!confirm('Удалить место?')) return;
     try {
-        await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
+        const res = await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
             method: 'DELETE'
         });
+        const text = await res.text();
+        if (!res.ok) {
+            alert(text || 'Ошибка удаления');
+            return;
+        }
         document.getElementById(`place-card-${placeId}`).remove();
-    } catch {
+    } catch(e) {
         alert('Ошибка удаления');
     }
 };
+
+window.openAddPlaceModal = function() {
+    const modal = document.getElementById('add-place-modal');
+    modal.style.display = 'flex';
+};
+
+window.closeAddPlaceModal = function() {
+    const modal = document.getElementById('add-place-modal');
+    modal.style.display = 'none';
+    document.getElementById('add-place-message').textContent = '';
+    document.getElementById('new-place-name').value = '';
+    document.getElementById('new-place-desc').value = '';
+    document.getElementById('new-place-country').value = '';
+    document.getElementById('new-place-city').value = '';
+    document.getElementById('new-place-preview').innerHTML = '';
+    document.getElementById('new-place-file-name').textContent = '';
+};
+
+
+
+window._runSearch = null;
+
 })();
+
+function showAddPlaceBtn() {
+    const email = localStorage.getItem('trava_email');
+    const wrap = document.getElementById('add-place-btn-wrap');
+    if (wrap) wrap.style.display = email ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    showAddPlaceBtn();
+
+    const fileInput = document.getElementById('new-place-file');
+    if (fileInput) {
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+            document.getElementById('new-place-file-name').textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.style.cssText = 'width:100%; border-radius:8px; max-height:200px; object-fit:cover;';
+                document.getElementById('new-place-preview').innerHTML = '';
+                document.getElementById('new-place-preview').appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    document.getElementById('save-place-btn')?.addEventListener('click', async () => {
+        const email = localStorage.getItem('trava_email');
+        const name = document.getElementById('new-place-name').value.trim();
+        const desc = document.getElementById('new-place-desc').value.trim();
+        const country = document.getElementById('new-place-country').value.trim();
+        const city = document.getElementById('new-place-city').value.trim();
+        const type = document.getElementById('new-place-type').value;
+        const msg = document.getElementById('add-place-message');
+        const file = document.getElementById('new-place-file').files[0];
+
+        if (!name || !country || !city) {
+            msg.textContent = 'Заполните название, страну и город';
+            msg.style.color = '#c62828';
+            return;
+        }
+
+        let imageData = '';
+        if (file) {
+            imageData = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const maxSide = 800;
+                        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+                        canvas.width = Math.round(img.width * scale);
+                        canvas.height = Math.round(img.height * scale);
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.85));
+                    };
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        try {
+            const res = await fetch('http://localhost:8080/places', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name, description: desc, country, city, type,
+                    image: imageData, rating: 0, userAdded: true
+                })
+            });
+
+            if (!res.ok) throw new Error(await res.text());
+
+            msg.textContent = 'Место добавлено!';
+            msg.style.color = '#2e7d32';
+            setTimeout(() => {
+                closeAddPlaceModal();
+                if (window._runSearch) window._runSearch();
+            }, 1000);
+        } catch(e) {
+            msg.textContent = e.message || 'Ошибка добавления';
+            msg.style.color = '#c62828';
+        }
+    });
+});

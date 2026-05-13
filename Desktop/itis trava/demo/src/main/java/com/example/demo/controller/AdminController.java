@@ -5,9 +5,11 @@ import com.example.demo.repository.ProfileCommentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
 import com.example.demo.review.ReviewRepository;
+import com.example.demo.place.Place;
 import com.example.demo.place.PlaceRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+
 
 @RestController
 @RequestMapping("/admin")
@@ -54,8 +56,13 @@ public class AdminController {
 
     @DeleteMapping("/place/{id}")
     public String deletePlace(@PathVariable Long id,
-                              @RequestParam String adminEmail) {
+                            @RequestParam String adminEmail) {
         checkAdmin(adminEmail);
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Место не найдено"));
+        if (!place.isUserAdded()) {
+            throw new RuntimeException("Нельзя удалять места из базы данных");
+        }
         placeRepository.deleteById(id);
         return "Место удалено";
     }

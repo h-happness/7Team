@@ -1,6 +1,6 @@
 package com.example.demo.place;
 
-
+import com.example.demo.place.PlaceRepository;
 import com.example.demo.review.Review;
 import com.example.demo.review.ReviewRepository;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,13 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final ReviewRepository reviewRepo;
+    private final PlaceRepository placeRepository;
 
-    public PlaceController(PlaceService placeService, ReviewRepository reviewRepo) {
+    public PlaceController(PlaceService placeService, ReviewRepository reviewRepo, PlaceRepository placeRepository) {
 
         this.placeService = placeService;
         this.reviewRepo = reviewRepo;
+        this.placeRepository = placeRepository;
     }
 
     @GetMapping
@@ -41,5 +43,12 @@ public class PlaceController {
                 .orElse(0);
 
         return new PlaceResponse(place, reviews, avg);
+    }
+
+    @PostMapping
+    public Place addPlace(@RequestBody Place place) {
+        place.setId(null);
+        place.setUserAdded(true);
+        return placeRepository.save(place);
     }
 }
