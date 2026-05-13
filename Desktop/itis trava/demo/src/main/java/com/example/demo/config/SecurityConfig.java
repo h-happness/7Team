@@ -42,11 +42,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.disable())
+            )
             .cors(cors -> {})
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/h2-console/**").permitAll().anyRequest().permitAll()
-            ).cors(cors -> {});
+                .requestMatchers("/h2-console/**").permitAll()
+                .anyRequest().permitAll()
+            );
 
         return http.build();
     }

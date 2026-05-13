@@ -22,6 +22,8 @@ public class ProfileController {
         this.commentRepository = commentRepository;
     }
 
+    
+
     private static String normEmail(String email) {
         return email == null ? null : email.trim().toLowerCase();
     }
@@ -43,11 +45,13 @@ public class ProfileController {
 
     public static class ProfileDto {
         public String email;
+        public Long id; 
         public String displayName;
         public String bio;
         public List<String> interests;
         public String avatarDataUrl;
         public List<ProfileComment> comments;
+         public String role;
     }
 
     public static class ProfileSummaryDto {
@@ -63,6 +67,8 @@ public class ProfileController {
 
         ProfileDto dto = new ProfileDto();
         dto.email = user.getEmail();
+        dto.id = user.getId(); 
+        dto.role = user.getRole();
         dto.displayName = user.getDisplayName();
         dto.bio = user.getBio();
         dto.avatarDataUrl = user.getAvatarDataUrl();
