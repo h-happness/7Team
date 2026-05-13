@@ -36,12 +36,12 @@ public class AuthController {
                         @RequestParam String password) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("пользователь с таким email не найден"));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return "Login successful";
+            return "Авторизация прошла успешно";
         } else {
-            throw new RuntimeException("Wrong password");
+            throw new RuntimeException("Неверный пароль");
         }
     }
 
