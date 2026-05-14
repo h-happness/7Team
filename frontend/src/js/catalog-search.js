@@ -70,47 +70,58 @@
     `;
 }
 
-  function renderCard(place) {
-    const imgSrc = place.image || '../../img/main/world.png';
-    return `
-      <div class="card" id="place-card-${place.id}">
+    function renderCard(place) {
+        const imgSrc = place.image || '../../img/main/world.png';
+        return `
+    <div class="card" id="place-card-${place.id}">
+        
         <div class="card-images single">
-        <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(place.name)}">
-    </div>
-    <div class="card-content" style="cursor:pointer" onclick="toggleReviews(${place.id})">
-          <h2>${escapeHtml(place.name)}</h2>
+          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(place.name)}">
+        </div>
+        <div class="card-content" style="cursor:pointer">
+            <a href="place.html?id=${place.id}" style="text-decoration:none; color:inherit;">
+                <h2>${escapeHtml(place.name)}</h2>
+            </a>
           <div class="meta">
             <span class="pill">${escapeHtml(place.country)}${place.city ? ', ' + escapeHtml(place.city) : ''}</span>
             <span class="pill">${escapeHtml(TYPE_LABEL[place.type] || place.type)}</span>
             <span class="pill">Рейтинг: ${place.rating} ${starString(place.rating)}</span>
           </div>
           <p>${escapeHtml(place.description || '')}</p>
-          <div style="color:#492308; font-size:13px; margin-top:8px;">
-            Нажмите чтобы посмотреть отзывы ▼
-          </div>
+          
+            <button onclick="toggleReviews(${place.id}); event.stopPropagation()"
+                    style="background:none; border:none; color:#492308; font-size:13px; cursor:pointer; text-decoration:underline;">
+              Нажмите чтобы посмотреть отзывы ▼
+            </button>
           ${window._isAdmin && place.userAdded ? `
-          <button onclick="deletePlace(${place.id})" 
-            style="margin-top:8px; background:#c62828; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:13px;">
-            Удалить место
-          </button>` : ''}
+            <button onclick="deletePlace(${place.id})"
+              style="margin-top:8px; background:#c62828; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:13px;">
+              Удалить место
+            </button>` : ''}
         </div>
-        <div id="reviews-${place.id}" style="display:none; padding:16px; border-top:1px solid #e8d5c4;">
-          <h3 style="color:#643411; margin-bottom:10px;">Отзывы</h3>
-          <div id="reviews-list-${place.id}">Загрузка...</div>
-          <h3 style="color:#643411; margin-top:14px; margin-bottom:8px;">Оставить отзыв</h3>
-          ${getReviewFormHtml(place.id)}
-        </div>
+      <div id="reviews-${place.id}" style="display:none; padding:16px; border-top:1px solid #e8d5c4;">
+        <h3 style="color:#643411; margin-bottom:10px;">Отзывы</h3>
+        <div id="reviews-list-${place.id}">Загрузка...</div>
+        <h3 style="color:#643411; margin-top:14px; margin-bottom:8px;">Оставить отзыв</h3>
+        ${getReviewFormHtml(place.id)}
       </div>
-    `;
-  }
+    </div>
+  `;
+    }
+
 
   function renderResults(container, items) {
-    if (!items || items.length === 0) {
-      container.innerHTML = `<div class="empty"><p>🔍 Ничего не найдено.</p></div>`;
-      return;
+      if (!items || items.length === 0) {
+          container.innerHTML = `<div class="empty"><p>🔍 Ничего не найдено.</p></div>`;
+          return;
+      }
+      if (items.length === 1) {
+          container.classList.add('single-card');
+      } else {
+          container.classList.remove('single-card');
+      }
+      container.innerHTML = items.map(renderCard).join('');
     }
-    container.innerHTML = items.map(renderCard).join('');
-  }
 
   // Глобальные функции для onclick
   window.toggleReviews = async function(placeId) {

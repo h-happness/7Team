@@ -73,7 +73,11 @@
                 <li class="place-item">
                     <div class="place-icon"><i class="fas ${icon}"></i></div>
                     <div class="place-info">
-                        <div class="place-name">${item.name}</div>
+                        <div class="place-name">
+                            <a href="place.html?id=${item.id}">
+                                ${item.name}
+                            </a>
+                        </div>
                         <div class="place-meta">
                             ${item.location ? `<span><i class="fas fa-location-dot"></i> ${item.location}</span>` : ''}
                             ${metaHtml}
@@ -89,10 +93,17 @@
         currentCountryData = data;
 
         heroTitle.textContent = data.name || decodedCountry;
-        heroSlogan.textContent = data.capital ? `Столица: ${data.capital}` : '';
+        heroSlogan.textContent = data.capital?.name ? `Столица: ${data.capital.name}` : '';
 
-        if (data.heroImage) {
-            heroSection.style.backgroundImage = `linear-gradient(rgba(73, 35, 8, 0.5), rgba(139, 69, 19, 0.6)), url('${data.heroImage}')`;
+        if (data.capital?.path) {
+            heroSection.style.backgroundImage = `
+            linear-gradient(
+            rgba(73,35,8,0.5),
+            rgba(139,69,19,0.6)
+        ),
+        url('${data.capital.path}')
+    `;
+
         }
 
         const factsHtml = `
@@ -132,11 +143,13 @@
             `<span class="season-badge"><i class="fas fa-calendar-alt"></i> ${s}</span>`
         ).join('') || '<span class="season-badge"><i class="fas fa-calendar-alt"></i> Круглый год</span>';
 
-        const photoHtml = data.photo
-            ? `<img src="${data.photo}" alt="${data.name}" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><i class=\'fas fa-mountain-city\'></i></div>'">`
-            : `<div class="photo-placeholder"><i class="fas fa-mountain-city"></i></div>`;
+            const photoHtml = data.flag
+                ? `<img src="${data.flag}" alt="${data.name}">`
+                : `<div class="photo-placeholder">
+                <i class="fas fa-flag"></i>
+                </div>`;
 
-        dynamicContainer.innerHTML = `
+            dynamicContainer.innerHTML = `
             <div class="bio-card">
                 <div class="bio-grid">
                     <div class="bio-photo">
@@ -220,99 +233,71 @@
 
             <div style="text-align: center; margin: 2rem 5% 3rem;">
                 <a href="catalog.html?country=${encodeURIComponent(data.name)}" class="btn">
-                    <i class="fas fa-search"></i> Смотреть все места в ${data.name}
+                    <i class="fas fa-search"></i> Смотреть все места
                 </a>
             </div>
         `;
+        }
+
+    async function loadLocalCountryData() {
+        try {
+            const res = await fetch('../../json/DateBase.json');
+            return await res.json();
+        } catch (e) {
+            console.error('Ошибка загрузки локального JSON:', e);
+            return null;
+        }
     }
 
     async function loadCountryData() {
         renderLoading();
 
         try {
-            let countryData = null;
-
-            if (window.TravaPlacesProvider && typeof window.TravaPlacesProvider.getCountryData === 'function') {
-                countryData = await window.TravaPlacesProvider.getCountryData(decodedCountry);
+            let backendData = null;
+            if (
+                window.TravaPlacesProvider &&
+                typeof window.TravaPlacesProvider.getCountryData === 'function'
+            ) {
+                backendData =
+                    await window.TravaPlacesProvider.getCountryData(decodedCountry);
             }
+            const localDb = await loadLocalCountryData();
+            const localCountry = Object.values(localDb.countries || {}).find(
+                c => c.name?.toLowerCase() === decodedCountry.toLowerCase()
+            );
+            const mergedData = {
+                ...(localCountry || {}),
+                ...(backendData || {})
+            };
+            const placesRes = await fetch(
+                `http://localhost:8080/places?country=${encodeURIComponent(decodedCountry)}`
+            );
+            const places = await placesRes.json();
+            const attractions = places.filter(
+                p => p.type === 'ATTRACTION'
+            );
 
-            if (!countryData) {
-                console.warn('[CountryPage] Провайдер не вернул данные, используем fallback');
-                countryData = getFallbackCountryData(decodedCountry);
-            }
+            const cafes = places.filter(
+                p => p.type === 'RESTAURANT'
+            );
 
-            if (countryData) {
-                renderCountryPage(countryData);
+            const hotels = places.filter(
+                p => p.type === 'HOTEL'
+            );
+
+            if (mergedData && mergedData.name) {
+                renderCountryPage({
+                    ...localCountry, attractions, cafes, hotels, totalPlaces: places.length});
             } else {
-                renderError(`К сожалению, информация о стране "${decodedCountry}" пока недоступна.`);
+                renderError(
+                    `Информация о стране "${decodedCountry}" не найдена`
+                );
             }
 
         } catch (error) {
             console.error('[CountryPage] Ошибка загрузки:', error);
-
-            const fallbackData = getFallbackCountryData(decodedCountry);
-            if (fallbackData) {
-                renderCountryPage(fallbackData);
-            } else {
-                renderError('Произошла ошибка при загрузке данных. Пожалуйста, попробуйте позже.');
-            }
+            renderError('Ошибка загрузки данных');
         }
-    }
-
-    function getFallbackCountryData(country) {
-        const fallbackMap = {
-            'италия': {
-                name: 'Италия',
-                capital: 'Рим',
-                currency: 'Евро (EUR)',
-                language: 'Итальянский',
-                timezone: 'UTC+1 / UTC+2',
-                description: 'Италия — средиземноморское государство, родина Римской империи и Ренессанса.',
-                popularSeasons: ['Весна', 'Осень'],
-                attractions: [
-                    { name: 'Колизей', location: 'Рим', rating: 4.7 },
-                    { name: 'Ватикан', location: 'Рим', rating: 4.8 }
-                ],
-                cafes: [
-                    { name: 'Caffè Florian', location: 'Венеция', rating: 4.6 }
-                ],
-                hotels: [
-                    { name: 'Hotel Eden', location: 'Рим', rating: 4.8 }
-                ]
-            },
-            'франция': {
-                name: 'Франция',
-                capital: 'Париж',
-                currency: 'Евро (EUR)',
-                language: 'Французский',
-                timezone: 'UTC+1 / UTC+2',
-                description: 'Франция — страна романтики, вина и высокой кухни.',
-                popularSeasons: ['Весна', 'Лето', 'Осень'],
-                attractions: [
-                    { name: 'Эйфелева башня', location: 'Париж', rating: 4.8 }
-                ],
-                cafes: [
-                    { name: 'Café de Flore', location: 'Париж', rating: 4.5 }
-                ],
-                hotels: [
-                    { name: 'The Ritz Paris', location: 'Париж', rating: 4.9 }
-                ]
-            }
-        };
-
-        const normalized = country.toLowerCase();
-        return fallbackMap[normalized] || {
-            name: country,
-            capital: '—',
-            currency: '—',
-            language: '—',
-            timezone: '—',
-            description: `${country} — прекрасная страна. Информация уточняется.`,
-            popularSeasons: ['Круглый год'],
-            attractions: [],
-            cafes: [],
-            hotels: []
-        };
     }
 
     loadCountryData();

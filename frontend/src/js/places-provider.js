@@ -43,6 +43,20 @@
     )].sort();
   }
 
+  async function getPlaceById(id) {
+    try {
+      const response = await fetch(`http://localhost:8080/places/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.place || data;
+    } catch (error) {
+      console.error('Error fetching place by ID:', error);
+      throw error;
+    }
+  }
+
   async function getReviews(placeId) {
     const res = await fetch(`${API_BASE}/reviews/place/${placeId}`);
     return await res.json();
@@ -57,5 +71,5 @@
     return await res.json();
   }
 
-  window.TravaPlacesProvider = { search, listCountries, listCities, getReviews, addReview };
+  window.TravaPlacesProvider = { search, listCountries, listCities, getReviews, addReview, getPlaceById };
 })();
