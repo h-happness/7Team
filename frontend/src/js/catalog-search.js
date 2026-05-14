@@ -283,36 +283,37 @@ async function checkAdminRole() {
 
 window.deleteReview = async function(reviewId, placeId) {
     const email = localStorage.getItem('trava_email');
-    if (!confirm('Удалить отзыв?')) return;
-    try {
-        await fetch(`http://localhost:8080/admin/review/${reviewId}?adminEmail=${encodeURIComponent(email)}`, {
-            method: 'DELETE'
-        });
-        const list = document.getElementById(`reviews-list-${Number(placeId)}`);
-        const reviews = await window.TravaPlacesProvider.getReviews(Number(placeId));
-        list.innerHTML = renderReviews(reviews, Number(placeId));
-    } catch(e) {
-        console.log('delete error:', e);
-        alert('Ошибка удаления');
-    }
+    showConfirmModal('Удалить этот отзыв?', async () => {
+        try {
+            await fetch(`http://localhost:8080/admin/review/${reviewId}?adminEmail=${encodeURIComponent(email)}`, {
+                method: 'DELETE'
+            });
+            const list = document.getElementById(`reviews-list-${Number(placeId)}`);
+            const reviews = await window.TravaPlacesProvider.getReviews(Number(placeId));
+            list.innerHTML = renderReviews(reviews, Number(placeId));
+        } catch(e) {
+            alert('Ошибка удаления');
+        }
+    });
 };
 
 window.deletePlace = async function(placeId) {
     const email = localStorage.getItem('trava_email');
-    if (!confirm('Удалить место?')) return;
-    try {
-        const res = await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
-            method: 'DELETE'
-        });
-        const text = await res.text();
-        if (!res.ok) {
-            alert(text || 'Ошибка удаления');
-            return;
+    showConfirmModal('Удалить это место?', async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
+                method: 'DELETE'
+            });
+            const text = await res.text();
+            if (!res.ok) {
+                alert(text || 'Ошибка удаления');
+                return;
+            }
+            document.getElementById(`place-card-${placeId}`).remove();
+        } catch {
+            alert('Ошибка удаления');
         }
-        document.getElementById(`place-card-${placeId}`).remove();
-    } catch(e) {
-        alert('Ошибка удаления');
-    }
+    });
 };
 
 window.openAddPlaceModal = function() {
@@ -425,4 +426,18 @@ document.addEventListener('DOMContentLoaded', () => {
             msg.style.color = '#c62828';
         }
     });
+    
 });
+window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').style.display = 'none';
+};
+
+function showConfirmModal(text, onConfirm) {
+    document.getElementById('confirm-text').textContent = text;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    const btn = document.getElementById('confirm-yes');
+    btn.onclick = () => {
+        closeConfirmModal();
+        onConfirm();
+    };
+}

@@ -183,17 +183,38 @@
     }
 }
 
-  async function deleteComment(commentId, targetEmail) {
-      const email = localStorage.getItem('trava_email');
-      if (!confirm('Удалить комментарий?')) return;
-      try {
-          await fetch(`http://localhost:8080/admin/comment/${commentId}?adminEmail=${encodeURIComponent(email)}`, {
-              method: 'DELETE'
-          });
-          const profile = await api.fetchProfile(targetEmail);
-          renderComments(document.getElementById('comments'), profile.comments, targetEmail);
-      } catch {
-          alert('Ошибка удаления');
-      }
-  }
+ async function deleteComment(commentId, targetEmail) {
+    const email = localStorage.getItem('trava_email');
+    showConfirmModal('Удалить комментарий?', async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/admin/comment/${commentId}?adminEmail=${encodeURIComponent(email)}`, {
+                method: 'DELETE'
+            });
+            if (!res.ok) {
+                alert('Ошибка удаления');
+                return;
+            }
+            // Перезагружаем профиль напрямую без api
+            const profileRes = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(targetEmail)}`);
+            const profile = await profileRes.json();
+            renderComments(document.getElementById('comments'), profile.comments, targetEmail);
+        } catch(e) {
+            console.log('error:', e);
+            alert('Ошибка удаления');
+        }
+    });
+}
+window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').style.display = 'none';
+};
+
+function showConfirmModal(text, onConfirm) {
+    document.getElementById('confirm-text').textContent = text;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    const btn = document.getElementById('confirm-yes');
+    btn.onclick = () => {
+        closeConfirmModal();
+        onConfirm();
+    };
+}
 })();
