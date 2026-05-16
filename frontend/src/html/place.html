@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Место</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/place.css">
+</head>
+<body>
+
+<header>
+    <a class="logo" href="main.html">Trava</a>
+    <nav>
+        <ul>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li data-auth="out"><a href="login.html">Вход</a></li>
+            <li data-auth="out"><a href="register.html">Регистрация</a></li>
+            <li data-auth="in"><a href="profile.html">Профиль</a></li>
+            <li data-auth="in"><a href="#" data-logout>Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="place">
+    <a href="catalog.html" class="back-link"><i class="fas fa-arrow-left"></i> Назад к каталогу</a>
+
+    <div id="place-container"></div>
+</main>
+
+<script src="../js/session.js" defer></script>
+<script src="../js/places-provider.js" defer></script>
+<script src="../js/place.js" defer></script>
+</body>
+</html>

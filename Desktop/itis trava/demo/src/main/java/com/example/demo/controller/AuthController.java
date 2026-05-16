@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequest;
 import com.example.demo.service.UserService;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -24,20 +26,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody AuthRequest request) {
-        return userService.register(request.email, request.password);
+    public User register(@RequestParam String email,
+                         @RequestParam String password) {
+        return userService.register(email, password);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest request) {
+    public String login(@RequestParam String email,
+                        @RequestParam String password) {
 
-        User user = userRepository.findByEmail(request.email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("пользователь с таким email не найден"));
 
-        if (passwordEncoder.matches(request.password, user.getPassword())) {
-            return "Login successful";
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return "Авторизация прошла успешно";
         } else {
-            throw new RuntimeException("Wrong password");
+            throw new RuntimeException("Неверный пароль");
         }
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleError(RuntimeException e) {
+        return e.getMessage();
     }
 }

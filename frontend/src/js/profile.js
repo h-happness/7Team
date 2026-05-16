@@ -38,6 +38,8 @@
     const api = window.TravaProfileApi;
     if (!api) return;
 
+    checkAdminRole();
+
     const email = String(localStorage.getItem('trava_email') || '').trim().toLowerCase();
     if (!email) {
       window.location.href = 'login.html';
@@ -97,38 +99,73 @@
       });
     }
 
+    let allProfiles = [];
+
     function refreshUsers() {
-      api.listProfiles()
-        .then((profiles) => {
-          renderUsersList($('user-list'), profiles, email);
-        })
-        .catch(() => {
-          renderUsersList($('user-list'), [], email);
-        });
+        api.listProfiles()
+            .then((profiles) => {
+                allProfiles = profiles;
+                renderUsersList($('user-list'), profiles, email);
+            })
+            .catch(() => {
+                renderUsersList($('user-list'), [], email);
+            });
     }
 
     function load() {
-      api.fetchProfile(email)
+    api.fetchProfile(email)
         .then((p) => {
-          $('display-name').value = p.displayName || '';
-          $('bio').value = p.bio || '';
-          interests = Array.isArray(p.interests) ? [...p.interests] : [];
-          avatarDataUrl = p.avatarDataUrl || '';
-          setAvatar($('avatar-box'), avatarImg, avatarLetter, email, avatarDataUrl);
-          // Avoid showing native "no file chosen" text; show a friendly state instead.
-          setAvatarFileLabel(avatarDataUrl ? 'Аватар уже загружен' : '');
-          updateInterests();
-          refreshUsers();
+            $('display-name').value = p.displayName || '';
+            $('bio').value = p.bio || '';
+            interests = Array.isArray(p.interests) ? [...p.interests] : [];
+            avatarDataUrl = p.avatarDataUrl || '';
+            setAvatar($('avatar-box'), avatarImg, avatarLetter, email, avatarDataUrl);
+            setAvatarFileLabel(avatarDataUrl ? 'Аватар уже загружен' : '');
+            updateInterests();
+            refreshUsers();
+            renderMyComments(p.comments);
         })
         .catch(() => {
-          // If backend has no profile yet, keep empty UI.
-          updateInterests();
-          refreshUsers();
+            updateInterests();
+            refreshUsers();
         });
-    }
+}
+
+function loadFavorites() {
+    fetch(`http://localhost:8080/favorites?email=${encodeURIComponent(email)}`)
+        .then(r => r.json())
+        .then(places => renderFavorites(places))
+        .catch(() => renderFavorites([]));
+}
+
+updateInterests();
+load();
+loadFavorites();
 
     updateInterests();
     load();
+
+    $('user-search-btn')?.addEventListener('click', () => {
+    const q = ($('user-search').value || '').trim().toLowerCase();
+    if (!q) {
+        renderUsersList($('user-list'), allProfiles, email);
+        return;
+    }
+    const filtered = allProfiles.filter(p =>
+        (p.displayName || '').toLowerCase().includes(q) ||
+        (p.email || '').toLowerCase().includes(q)
+    );
+    renderUsersList($('user-list'), filtered, email);
+});
+
+$('user-search-reset')?.addEventListener('click', () => {
+    $('user-search').value = '';
+    renderUsersList($('user-list'), allProfiles, email);
+});
+
+$('user-search')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') $('user-search-btn').click();
+});
 
     $('add-interest').addEventListener('click', () => {
       const raw = $('interest-input').value || '';
@@ -232,5 +269,115 @@
         msg.classList.add('error');
       }
     });
+
+    function renderMyComments(comments) {
+    const container = $('my-comments');
+    if (!container) return;
+    container.innerHTML = '';
+    const list = Array.isArray(comments) ? comments : [];
+    if (list.length === 0) {
+        const muted = document.createElement('div');
+        muted.className = 'muted';
+        muted.textContent = 'Комментариев пока нет';
+        container.appendChild(muted);
+        return;
+    }
+    list.forEach((c) => {
+        const item = document.createElement('div');
+        item.className = 'comment';
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const who = c.authorName || c.authorEmail || 'Аноним';
+        const when = c.createdAt ? new Date(c.createdAt).toLocaleString() : '';
+        meta.textContent = when ? `${who} • ${when}` : who;
+
+        if (window._isAdmin) {
+            const btn = document.createElement('button');
+            btn.textContent = 'Удалить';
+            btn.style.cssText = 'margin-left:10px; background:#c62828; color:white; border:none; padding:2px 8px; border-radius:4px; cursor:pointer; font-size:11px;';
+            btn.addEventListener('click', async () => {
+                showConfirmModal('Удалить комментарий?', async () => {
+                    try {
+                        await fetch(`http://localhost:8080/admin/comment/${c.id}?adminEmail=${encodeURIComponent(email)}`, {
+                            method: 'DELETE'
+                        });
+                        load();
+                    } catch {
+                        alert('Ошибка удаления');
+                    }
+                });
+            });
+            meta.appendChild(btn);
+        }
+
+        const text = document.createElement('div');
+        text.className = 'text';
+        text.textContent = c.text || '';
+
+        item.appendChild(meta);
+        item.appendChild(text);
+        container.appendChild(item);
+    });
+  }
   });
+
+  async function checkAdminRole() {
+    const email = localStorage.getItem('trava_email');
+    if (!email) { window._isAdmin = false; return; }
+    try {
+        const res = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
+        const profile = await res.json();
+        window._isAdmin = profile.role === 'ADMIN';
+    } catch {
+        window._isAdmin = false;
+    }
+  }
+
+  window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').style.display = 'none';
+};
+
+function showConfirmModal(text, onConfirm) {
+    document.getElementById('confirm-text').textContent = text;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    const btn = document.getElementById('confirm-yes');
+    btn.onclick = () => {
+        closeConfirmModal();
+        onConfirm();
+    };
+}
+
 })();
+function renderFavorites(places) {
+    const container = document.getElementById('favorites-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!places || places.length === 0) {
+        const muted = document.createElement('div');
+        muted.className = 'muted';
+        muted.textContent = 'Нет избранных мест';
+        container.appendChild(muted);
+        return;
+    }
+
+    places.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'user-item';
+
+        const left = document.createElement('div');
+        const a = document.createElement('a');
+        a.href = `place.html?id=${p.id}`;
+        a.textContent = p.name;
+        left.appendChild(a);
+
+        const right = document.createElement('div');
+        right.className = 'muted';
+        right.textContent = `${p.country}${p.city ? ', ' + p.city : ''}`;
+
+        item.appendChild(left);
+        item.appendChild(right);
+        container.appendChild(item);
+    });
+}

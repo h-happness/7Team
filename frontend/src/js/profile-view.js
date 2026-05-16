@@ -39,9 +39,11 @@
     });
   }
 
-  function renderComments(container, comments) {
+  function renderComments(container, comments, targetEmail) {
     container.innerHTML = '';
     const list = Array.isArray(comments) ? comments : [];
+    const isAdmin = window._isAdmin === true;
+
     if (list.length === 0) {
       const muted = document.createElement('div');
       muted.className = 'muted';
@@ -60,6 +62,14 @@
         const when = c.createdAt ? new Date(c.createdAt).toLocaleString() : '';
         meta.textContent = when ? `${who} • ${when}` : who;
 
+        if (isAdmin) {
+            const btn = document.createElement('button');
+            btn.textContent = 'Удалить';
+            btn.style.cssText = 'margin-left:10px; background:#c62828; color:white; border:none; padding:2px 8px; border-radius:4px; cursor:pointer; font-size:11px;';
+            btn.addEventListener('click', () => deleteComment(c.id, targetEmail));
+            meta.appendChild(btn);
+        }
+
         const text = document.createElement('div');
         text.className = 'text';
         text.textContent = c.text || '';
@@ -67,12 +77,14 @@
         item.appendChild(meta);
         item.appendChild(text);
         container.appendChild(item);
-      });
-  }
+    });
+}
 
   document.addEventListener('DOMContentLoaded', () => {
     const api = window.TravaProfileApi;
     if (!api) return;
+
+    checkAdminRole();
 
     const targetEmail = parseEmailParam();
     if (!targetEmail) {
@@ -92,7 +104,7 @@
       $('view-bio').textContent = profile.bio || '—';
       renderTags($('view-interests'), profile.interests);
       setAvatar(avatarImg, avatarLetter, profile.email, profile.avatarDataUrl);
-      renderComments(commentsEl, profile.comments);
+      renderComments(commentsEl, profile.comments, targetEmail);
     }
 
     function loadProfile() {
@@ -159,4 +171,50 @@
         });
     });
   });
+  async function checkAdminRole() {
+    const email = localStorage.getItem('trava_email');
+    if (!email) { window._isAdmin = false; return; }
+    try {
+        const res = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
+        const profile = await res.json();
+        window._isAdmin = profile.role === 'ADMIN';
+    } catch {
+        window._isAdmin = false;
+    }
+}
+
+ async function deleteComment(commentId, targetEmail) {
+    const email = localStorage.getItem('trava_email');
+    showConfirmModal('Удалить комментарий?', async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/admin/comment/${commentId}?adminEmail=${encodeURIComponent(email)}`, {
+                method: 'DELETE'
+            });
+            if (!res.ok) {
+                alert('Ошибка удаления');
+                return;
+            }
+            // Перезагружаем профиль напрямую без api
+            const profileRes = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(targetEmail)}`);
+            const profile = await profileRes.json();
+            renderComments(document.getElementById('comments'), profile.comments, targetEmail);
+        } catch(e) {
+            console.log('error:', e);
+            alert('Ошибка удаления');
+        }
+    });
+}
+window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').style.display = 'none';
+};
+
+function showConfirmModal(text, onConfirm) {
+    document.getElementById('confirm-text').textContent = text;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    const btn = document.getElementById('confirm-yes');
+    btn.onclick = () => {
+        closeConfirmModal();
+        onConfirm();
+    };
+}
 })();

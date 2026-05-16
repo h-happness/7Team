@@ -3,24 +3,35 @@ package com.example.demo.place;
 
 import jakarta.persistence.*;
 
-
+@Entity
+@Table(name = "places")
 public class Place {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-
     private String country;
     private String city;
-
     private double lat;
     private double lng;
-
+    @Enumerated(EnumType.STRING)
     private PlaceType type;
-
     private double rating;
+    @Lob
     private String image;
+
+    private boolean userAdded = false;
+
+    public boolean isUserAdded() {
+        return userAdded;
+    }
+
+    public void setUserAdded(boolean userAdded) {
+        this.userAdded = userAdded;
+    }
+
 
     public String getImage() {
         return image;

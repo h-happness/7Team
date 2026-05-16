@@ -73,13 +73,39 @@
         <section class="panel" style="grid-column: 1 / -1;">
             <h2>Пользователи</h2>
             <div class="muted">Можно открыть чужой профиль и посмотреть интересы/комментарии.</div>
+            <div style="margin:12px 0; display:flex; gap:10px;">
+                <input id="user-search" type="text" placeholder="Поиск по имени..." 
+                    style="flex:1; padding:10px; border-radius:8px; border:1px solid #d6c2b3;">
+                <button id="user-search-btn" class="btn-small">Найти</button>
+                <button id="user-search-reset" class="btn-small" style="background:#7a6656;">Сбросить</button>
+            </div>
             <div class="user-list" id="user-list"></div>
         </section>
+
+        <section class="panel" style="grid-column: 1 / -1;">
+            <h2>Комментарии на моём профиле</h2>
+            <div class="comments" id="my-comments"></div>
+        </section>
+        <section class="panel" style="grid-column: 1 / -1;">
+            <section class="panel" style="grid-column: 1 / -1;">
+                <h2>Избранные места</h2>
+                <div class="user-list" id="favorites-list"></div>
+            </section>
     </div>
 </main>
 
 <script src="../js/session.js" defer></script>
 <script src="../js/profile-api.js" defer></script>
 <script src="../js/profile.js" defer></script>
+
+<div id="confirm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:15px; padding:30px; width:350px; text-align:center;">
+        <h3 style="font-family:'Playfair Display',serif; color:#643411; margin-bottom:15px;" id="confirm-text">Вы уверены?</h3>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button id="confirm-yes" class="btn-small">Удалить</button>
+            <button onclick="closeConfirmModal()" class="btn-small" style="background:#7a6656;">Отмена</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

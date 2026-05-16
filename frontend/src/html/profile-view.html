@@ -71,5 +71,15 @@
 <script src="../js/session.js" defer></script>
 <script src="../js/profile-api.js" defer></script>
 <script src="../js/profile-view.js" defer></script>
+
+<div id="confirm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:15px; padding:30px; width:350px; text-align:center;">
+        <h3 style="font-family:'Playfair Display',serif; color:#643411; margin-bottom:15px;" id="confirm-text">Вы уверены?</h3>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button id="confirm-yes" class="btn-small">Удалить</button>
+            <button onclick="closeConfirmModal()" class="btn-small" style="background:#7a6656;">Отмена</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

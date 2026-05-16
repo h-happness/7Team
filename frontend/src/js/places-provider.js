@@ -1,209 +1,102 @@
-let DATA = [];
-let COUNTRY_INFO = {};
+(() => {
+  const API_BASE = window.API_BASE_URL || 'http://localhost:8080';
 
-async function loadData() {
-  try {
-    console.log('Начинаем загрузку JSON...');
-    const response = await fetch('../json/DateBase.json');
+  async function search(params = {}) {
+    const url = new URL(`${API_BASE}/places`);
+    if (params.country) url.searchParams.set('country', params.country);
+    if (params.city) url.searchParams.set('city', params.city);
+    if (params.type) url.searchParams.set('type', params.type.toUpperCase());
 
-    if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
+    const res = await fetch(url.toString());
+    let data = await res.json();
+
+    if (params.q) {
+      const q = params.q.toLowerCase();
+      data = data.filter(p =>
+        (p.name || '').toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        (p.country || '').toLowerCase().includes(q) ||
+        (p.city || '').toLowerCase().includes(q)
+      );
     }
 
-    const jsonData = await response.json();
-    DATA = [];
-    COUNTRY_INFO = jsonData.countries || {};
+    if (params.minRating) {
+      data = data.filter(p => p.rating >= Number(params.minRating));
+    }
 
-    Object.keys(COUNTRY_INFO).forEach(countryKey => {
-      const country = COUNTRY_INFO[countryKey];
+    return data;
+  }
 
-      // Извлекаем отели
-      if (country.hotels) {
-        Object.keys(country.hotels).forEach(cityKey => {
-          const cityHotels = country.hotels[cityKey];
-          Object.keys(cityHotels).forEach(hotelKey => {
-            const hotel = cityHotels[hotelKey];
-            DATA.push({
-              id: `${countryKey}-hotel-${hotelKey}`,
-              name: hotel.name,
-              country: country.name,
-              city: cityKey,
-              type: 'hotel',
-              rating: hotel.rating,
-              description: `Отель в ${cityKey}, ${country.name}`,
-              season: 'Круглый год',
-              images: [hotel.path]
-            });
-          });
-        });
+  async function listCountries() {
+    const res = await fetch(`${API_BASE}/places`);
+    const data = await res.json();
+    return [...new Set(data.map(p => p.country))].sort();
+  }
+
+  async function listCities(country) {
+    const res = await fetch(`${API_BASE}/places`);
+    const data = await res.json();
+    return [...new Set(
+      data
+        .filter(p => !country || p.country === country)
+        .map(p => p.city)
+    )].sort();
+  }
+
+  async function getPlaceById(id) {
+    try {
+      const response = await fetch(`http://localhost:8080/places/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      // Извлекаем достопримечательности
-      if (country.attractions) {
-        Object.keys(country.attractions).forEach(cityKey => {
-          const cityAttractions = country.attractions[cityKey];
-          Object.keys(cityAttractions).forEach(attractionKey => {
-            const attraction = cityAttractions[attractionKey];
-            DATA.push({
-              id: `${countryKey}-attraction-${attractionKey}`,
-              name: attraction.name,
-              country: country.name,
-              city: cityKey,
-              type: 'attraction',
-              rating: attraction.rating,
-              description: `Достопримечательность в ${cityKey}, ${country.name}`,
-              season: 'Круглый год',
-              images: [attraction.path]
-            });
-          });
-        });
-      }
-
-      // Извлекаем кафе/рестораны
-      if (country.cafes) {
-        Object.keys(country.cafes).forEach(cityKey => {
-          const cityCafes = country.cafes[cityKey];
-          Object.keys(cityCafes).forEach(cafeKey => {
-            const cafe = cityCafes[cafeKey];
-            DATA.push({
-              id: `${countryKey}-cafe-${cafeKey}`,
-              name: cafe.name,
-              country: country.name,
-              city: cityKey,
-              type: 'restaurant',
-              rating: cafe.rating,
-              description: `Ресторан/кафе в ${cityKey}, ${country.name}`,
-              season: 'Круглый год',
-              images: [cafe.path]
-            });
-          });
-        });
-      }
-    });
-
-    console.log('Данные успешно загружены:', {
-      totalPlaces: DATA.length,
-      countries: Object.keys(COUNTRY_INFO),
-      samplePlace: DATA[0] || 'Нет мест для примера'
-    });
-  } catch (error) {
-    console.error('Ошибка загрузки данных:', error);
-    DATA = [];
-    COUNTRY_INFO = {};
-  }
-}
-
-
-function norm(s) {
-  return String(s || '').trim().toLowerCase();
-}
-
-function matchesText(place, q) {
-  if (!q) return true;
-  const hay = [place.name, place.country, place.city, place.type, place.description].map(norm).join(' ');
-  return hay.includes(norm(q));
-}
-
-async function search(params = {}) {
-  await loadData(); // Загружаем данные перед поиском
-
-  const q = norm(params.q);
-  const country = norm(params.country);
-  const city = norm(params.city);
-  const type = norm(params.type);
-  const minRating = params.minRating ? Number(params.minRating) : null;
-
-  const result = DATA.filter((p) => {
-    if (country && norm(p.country) !== country) return false;
-    if (city && norm(p.city) !== city) return false;
-    if (type && norm(p.type) !== type) return false;
-    if (minRating !== null && Number(p.rating || 0) < minRating) return false;
-    if (!matchesText(p, q)) return false;
-    return true;
-  });
-
-  return result;
-}
-
-function listCountries() {
-  return Object.keys(COUNTRY_INFO).sort((a, b) => a.localeCompare(b));
-}
-
-function listCities(country) {
-  const c = norm(country);
-  const filtered = c ? DATA.filter((p) => norm(p.country) === c) : DATA;
-  return Array.from(new Set(filtered.map((p) => p.city))).sort((a, b) => a.localeCompare(b));
-}
-
-async function getCountryData(countryName) {
-  await loadData();
-
-  const countryInfo = Object.values(COUNTRY_INFO).find(c => c.name === countryName);
-  if (!countryInfo) return null;
-
-  // Извлекаем отели для этой страны
-  const hotels = [];
-  if (countryInfo.hotels) {
-    Object.keys(countryInfo.hotels).forEach(cityKey => {
-      const cityHotels = countryInfo.hotels[cityKey];
-      Object.keys(cityHotels).forEach(hotelKey => {
-        const hotel = cityHotels[hotelKey];
-        hotels.push({
-          name: hotel.name,
-          location: cityKey,
-          rating: hotel.rating
-        });
-      });
-    });
+      const data = await response.json();
+      return data.place || data;
+    } catch (error) {
+      console.error('Error fetching place by ID:', error);
+      throw error;
+    }
   }
 
-  // Извлекаем достопримечательности
-  const attractions = [];
-  if (countryInfo.attractions) {
-    Object.keys(countryInfo.attractions).forEach(cityKey => {
-      const cityAttractions = countryInfo.attractions[cityKey];
-      Object.keys(cityAttractions).forEach(attractionKey => {
-        const attraction = cityAttractions[attractionKey];
-        attractions.push({
-          name: attraction.name,
-          location: cityKey,
-          rating: attraction.rating
-        });
-      });
-    });
+  async function getReviews(placeId) {
+    const res = await fetch(`${API_BASE}/reviews/place/${placeId}`);
+    return await res.json();
   }
 
-  // Извлекаем кафе/рестораны
-  const cafes = [];
-  if (countryInfo.cafes) {
-    Object.keys(countryInfo.cafes).forEach(cityKey => {
-      const cityCafes = countryInfo.cafes[cityKey];
-      Object.keys(cityCafes).forEach(cafeKey => {
-        const cafe = cityCafes[cafeKey];
-        cafes.push({
-          name: cafe.name,
-          location: cityKey,
-          rating: cafe.rating
-        });
-      });
+  async function addReview(placeId, userId, text, rating) {
+    const res = await fetch(`${API_BASE}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeId, userId, text, rating })
     });
-  }
+    if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Ошибка отправки');
+    }
+    return await res.json();
+    }
+    async function addFavorite(placeId, email) {
+        const res = await fetch(`${API_BASE}/favorites/add?email=${encodeURIComponent(email)}&placeId=${placeId}`, {
+            method: 'POST'
+        });
+        return await res.text();
+    }
 
-  return {
-    name: countryInfo.name,
-    capital: countryInfo.capital?.name || '—',
-    currency: countryInfo.currency || '—',
-    language: countryInfo.language || '—',
-    timezone: countryInfo.timezone || '—',
-    description: countryInfo.discription || 'Информация уточняется.',
-    popularSeasons: countryInfo.popularSeason || ['Круглый год'],
-    heroImage: countryInfo.flag || null,
-    photo: countryInfo.capital?.path || null,
-    hotels: hotels,
-    attractions: attractions,
-    cafes: cafes,
-    totalPlaces: hotels.length + attractions.length + cafes.length
-  };
-}
+    async function removeFavorite(placeId, email) {
+        const res = await fetch(`${API_BASE}/favorites/remove?email=${encodeURIComponent(email)}&placeId=${placeId}`, {
+            method: 'DELETE'
+        });
+        return await res.text();
+    }
 
-window.TravaPlacesProvider = { search, listCountries, listCities, getCountryData };
+    async function getFavoriteIds(email) {
+        const res = await fetch(`${API_BASE}/favorites/ids?email=${encodeURIComponent(email)}`);
+        return await res.json();
+    }
+
+    async function getFavorites(email) {
+        const res = await fetch(`${API_BASE}/favorites?email=${encodeURIComponent(email)}`);
+        return await res.json();
+    }
+
+  window.TravaPlacesProvider = { search, listCountries, listCities, getReviews, addReview, getPlaceById, addFavorite, removeFavorite, getFavoriteIds, getFavorites };
+})();
