@@ -295,7 +295,8 @@ $('user-search')?.addEventListener('keydown', (e) => {
         if (window._isAdmin) {
             const btn = document.createElement('button');
             btn.textContent = 'Удалить';
-            btn.style.cssText = 'margin-left:10px; background:#c62828; color:white; border:none; padding:2px 8px; border-radius:4px; cursor:pointer; font-size:11px;';
+            btn.className = 'action-btn action-btn--danger action-btn--sm';
+            btn.style.marginLeft = '10px';
             btn.addEventListener('click', async () => {
                 showConfirmModal('Удалить комментарий?', async () => {
                     try {

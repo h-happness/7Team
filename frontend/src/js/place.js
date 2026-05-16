@@ -299,7 +299,7 @@
         <span class="comment-user">${escapeHtml(r.user?.displayName || r.user?.email || 'Пользователь')}</span>
         <div class="comment-rating">
           ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
-          ${isAdmin ? `<button class="comment-delete" onclick="deleteReview(${r.id}, ${placeId})">Удалить</button>` : ''}
+          ${isAdmin ? `<button class="action-btn action-btn--danger action-btn--sm" onclick="deleteReview(${r.id}, ${placeId})">Удалить</button>` : ''}
         </div>
       </div>
       <div class="comment-text">${escapeHtml(r.text || '')}</div>

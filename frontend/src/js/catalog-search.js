@@ -34,7 +34,7 @@
         <div style="font-size:12px; color:#7a6656; margin-bottom:4px;">
           ${escapeHtml(r.user?.displayName || r.user?.email || 'Пользователь')} • 
           ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
-          ${isAdmin ? `<button onclick="deleteReview(${r.id}, ${placeId})" style="margin-left:10px; background:#c62828; color:white; border:none; padding:2px 8px; border-radius:4px; cursor:pointer; font-size:11px;">Удалить</button>` : ''}
+          ${isAdmin ? `<button class="action-btn action-btn--danger action-btn--sm" onclick="deleteReview(${r.id}, ${placeId})" style="margin-left:10px;">Удалить</button>` : ''}
         </div>
         <div>${escapeHtml(r.text || '')}</div>
       </div>
@@ -101,7 +101,8 @@
             </button>
           ${window._isAdmin && place.userAdded ? `
             <button onclick="deletePlace(${place.id})"
-              style="margin-top:8px; background:#c62828; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:13px;">
+              class="action-btn action-btn--danger"
+              style="margin-top:8px;">
               Удалить место
             </button>` : ''}
         </div>

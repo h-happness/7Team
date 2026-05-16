@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.UserService;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.dto.AuthRequest;
 import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,22 +27,38 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestParam String email,
-                         @RequestParam String password) {
-        return userService.register(email, password);
+    public User register(@RequestBody(required = false) AuthRequest body,
+                         @RequestParam(required = false) String email,
+                         @RequestParam(required = false) String password) {
+        String resolvedEmail = (body != null && body.email != null) ? body.email : email;
+        String resolvedPassword = (body != null && body.password != null) ? body.password : password;
+
+        if (resolvedEmail == null || resolvedEmail.isBlank() || resolvedPassword == null || resolvedPassword.isBlank()) {
+            throw new RuntimeException("email/password required");
+        }
+
+        return userService.register(resolvedEmail.trim(), resolvedPassword.trim());
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
+    public String login(@RequestBody(required = false) AuthRequest body,
+                        @RequestParam(required = false) String email,
+                        @RequestParam(required = false) String password) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("пользователь с таким email не найден"));
+        String resolvedEmail = (body != null && body.email != null) ? body.email : email;
+        String resolvedPassword = (body != null && body.password != null) ? body.password : password;
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return "Авторизация прошла успешно";
+        if (resolvedEmail == null || resolvedEmail.isBlank() || resolvedPassword == null || resolvedPassword.isBlank()) {
+            throw new RuntimeException("email/password required");
+        }
+
+        User user = userRepository.findByEmail(resolvedEmail.trim())
+                .orElseThrow(() -> new RuntimeException("РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј email РЅРµ РЅР°Р№РґРµРЅ"));
+
+        if (passwordEncoder.matches(resolvedPassword.trim(), user.getPassword())) {
+            return "РђРІС‚РѕСЂРёР·Р°С†РёСЏ РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ";
         } else {
-            throw new RuntimeException("Неверный пароль");
+            throw new RuntimeException("РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ");
         }
     }
 

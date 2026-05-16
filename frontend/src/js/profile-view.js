@@ -65,7 +65,8 @@
         if (isAdmin) {
             const btn = document.createElement('button');
             btn.textContent = 'Удалить';
-            btn.style.cssText = 'margin-left:10px; background:#c62828; color:white; border:none; padding:2px 8px; border-radius:4px; cursor:pointer; font-size:11px;';
+            btn.className = 'action-btn action-btn--danger action-btn--sm';
+            btn.style.marginLeft = '10px';
             btn.addEventListener('click', () => deleteComment(c.id, targetEmail));
             meta.appendChild(btn);
         }
@@ -80,11 +81,13 @@
     });
 }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     const api = window.TravaProfileApi;
     if (!api) return;
 
-    checkAdminRole();
+    // Ensure admin role is known before first render, otherwise delete buttons
+    // may not appear until a full reload.
+    await checkAdminRole();
 
     const targetEmail = parseEmailParam();
     if (!targetEmail) {
