@@ -72,6 +72,7 @@
 
     function renderCard(place) {
         const imgSrc = place.image || '../../img/main/world.png';
+        const email = localStorage.getItem('trava_email');
         return `
     <div class="card" id="place-card-${place.id}">
         
@@ -92,6 +93,11 @@
             <button onclick="toggleReviews(${place.id}); event.stopPropagation()"
                     style="background:none; border:none; color:#492308; font-size:13px; cursor:pointer; text-decoration:underline;">
               Нажмите чтобы посмотреть отзывы ▼
+            </button>
+            <button onclick="toggleFavorite(${place.id})" 
+            id="fav-btn-${place.id}"
+            style="background:none; border:none; font-size:20px; cursor:pointer; padding:4px;">
+            ${window._favoriteIds?.includes(place.id) ? '❤️' : '🤍'}
             </button>
           ${window._isAdmin && place.userAdded ? `
             <button onclick="deletePlace(${place.id})"
@@ -191,10 +197,10 @@
       msg.textContent = 'Отзыв добавлен!';
       msg.style.color = '#2e7d32';
     } catch(e) {
-      console.log('error:', e);
-      msg.textContent = 'Ошибка отправки';
-      msg.style.color = '#c62828';
-    }
+    console.log('error:', e);
+    msg.textContent = e.message || 'Ошибка отправки';
+    msg.style.color = '#c62828';
+}
 };
 
   async function setCityOptions(provider) {
@@ -221,6 +227,17 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     await checkAdminRole(); 
+    const email = localStorage.getItem('trava_email');
+    if (email) {
+        try {
+            window._favoriteIds = await window.TravaPlacesProvider.getFavoriteIds(email);
+        } catch {
+            window._favoriteIds = [];
+        }
+    } else {
+        window._favoriteIds = [];
+    }
+
     const provider = window.TravaPlacesProvider;
     if (!provider) return;
 
@@ -236,18 +253,51 @@
     });
 
     await setCityOptions(provider);
+    // Применяем параметры из URL
+    const params = new URLSearchParams(window.location.search);
+    const typeParam = params.get('type');
+    const countryParam = params.get('country');
+
+    if (countryParam) {
+        const countrySelect = $('country');
+        for (let opt of countrySelect.options) {
+            if (opt.value.toLowerCase() === countryParam.toLowerCase()) {
+                opt.selected = true;
+                break;
+            }
+        }
+        await setCityOptions(provider);
+    }
+
+    if (typeParam) {
+        const typeSelect = $('type');
+        for (let opt of typeSelect.options) {
+            if (opt.value.toLowerCase() === typeParam.toLowerCase()) {
+                opt.selected = true;
+                break;
+            }
+        }
+}
 
     const runSearch = async () => {
-      const f = {
+    const f = {
         q: $('q').value || '',
         country: $('country').value || '',
         city: $('city').value || '',
         type: $('type').value || '',
         minRating: $('rating').value || '',
-      };
-      const items = await provider.search(f);
-      renderResults(resultsEl, items);
     };
+    let items = await provider.search(f);
+
+    // Фильтр избранного
+   const favOnly = document.getElementById('favorites-only')?.checked;
+if (favOnly) {
+    const favIds = (window._favoriteIds || []).map(Number);
+    items = items.filter(p => favIds.includes(Number(p.id)));
+}
+
+    renderResults(resultsEl, items);
+};
 
     const runSearchDebounced = debounce(runSearch, 300);
 
@@ -269,6 +319,7 @@
       $('city').value = '';
       runSearch();
     });
+    document.getElementById('favorites-only')?.addEventListener('change', runSearch);
 
 
     window._runSearch = runSearch;
@@ -327,14 +378,15 @@ window.deletePlace = async function(placeId) {
     });
 };
 
+
 window.openAddPlaceModal = function() {
     const modal = document.getElementById('add-place-modal');
-    modal.style.display = 'flex';
+    modal.classList.add('show');
 };
 
 window.closeAddPlaceModal = function() {
     const modal = document.getElementById('add-place-modal');
-    modal.style.display = 'none';
+    modal.classList.remove('show');
     document.getElementById('add-place-message').textContent = '';
     document.getElementById('new-place-name').value = '';
     document.getElementById('new-place-desc').value = '';
@@ -355,6 +407,7 @@ function showAddPlaceBtn() {
     const wrap = document.getElementById('add-place-btn-wrap');
     if (wrap) wrap.style.display = email ? 'block' : 'none';
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     showAddPlaceBtn();
@@ -452,3 +505,36 @@ function showConfirmModal(text, onConfirm) {
         onConfirm();
     };
 }
+window.toggleFavorite = async function(placeId) {
+    const email = localStorage.getItem('trava_email');
+    if (!email) {
+        const btn = document.getElementById(`fav-btn-${placeId}`);
+        if (btn && !btn.nextSibling?.classList?.contains('fav-msg')) {
+            const msg = document.createElement('span');
+            msg.textContent = 'Войдите чтобы добавить в избранное';
+            msg.className = 'fav-msg';
+            msg.style.cssText = 'font-size:12px; color:#c62828; margin-left:8px;';
+            btn.parentNode.insertBefore(msg, btn.nextSibling);
+            setTimeout(() => msg.remove(), 3000);
+        }
+        return;
+    }
+
+    const numId = Number(placeId);
+    const isFav = (window._favoriteIds || []).map(Number).includes(numId);
+    const btn = document.getElementById(`fav-btn-${placeId}`);
+
+    try {
+        if (isFav) {
+            await window.TravaPlacesProvider.removeFavorite(numId, email);
+            window._favoriteIds = window._favoriteIds.filter(id => Number(id) !== numId);
+            if (btn) btn.textContent = '🤍';
+        } else {
+            await window.TravaPlacesProvider.addFavorite(numId, email);
+            window._favoriteIds = [...(window._favoriteIds || []), numId];
+            if (btn) btn.textContent = '❤️';
+        }
+    } catch {
+        alert('Ошибка');
+    }
+};

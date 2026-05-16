@@ -5,7 +5,10 @@ import com.example.demo.entity.User;
 import com.example.demo.place.Place;
 import com.example.demo.place.PlaceRepository;
 import com.example.demo.repository.UserRepository;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -26,6 +29,13 @@ public class ReviewController {
     @PostMapping
     public Review add(@RequestBody ReviewRequest request) {
         User user = userRepo.findById(request.getUserId()).orElseThrow();
+
+         Optional<Review> existing = repo.findByUserIdAndPlaceId(
+        request.getUserId(), request.getPlaceId()
+        );
+        if (existing.isPresent()) {
+            throw new RuntimeException("Вы уже оставляли отзыв на это место");
+        }
 
         Review review = new Review();
         review.setUser(user);
@@ -53,5 +63,10 @@ public class ReviewController {
     @GetMapping("/place/{id}")
     public List<Review> getByPlace(@PathVariable Long id) {
         return repo.findByPlaceId(id);
+    }
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleError(RuntimeException e) {
+        return e.getMessage();
     }
 }

@@ -25,7 +25,7 @@
 
     // Проверка авторизации
     function isUserAuthenticated() {
-        return localStorage.getItem('isAuthenticated') === 'true';
+        return !!localStorage.getItem('trava_email');
     }
 
     function requireAuth() {
@@ -373,13 +373,14 @@
 
             await updatePlaceRating(placeId);
         } catch (error) {
-            console.error('Ошибка отправки отзыва:', error);
+            const errText = await error.message || 'Ошибка отправки. Попробуйте ещё раз.';
+            
 
             if (error.message.includes('User not found')) {
                 msg.textContent = 'Пользователь не найден. Войдите заново.';
                 setTimeout(() => window.location.href = 'login.html', 3000);
             } else {
-                msg.textContent = 'Ошибка отправки. Попробуйте ещё раз.';
+                msg.textContent = errText;
             }
             msg.style.color = '#c62828';
         } finally {

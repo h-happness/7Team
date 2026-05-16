@@ -70,6 +70,12 @@
                     <option value="3.5">3.5+</option>
                 </select>
             </div>
+            <div class="filter">
+                <label>
+                    <input type="checkbox" id="favorites-only" style="margin-right:6px;">
+                    Только избранное
+                </label>
+            </div>
 
             <div class="filter actions">
                 <button id="reset" type="button" class="btn-inline">Сбросить</button>
@@ -135,10 +141,7 @@
 <script src="../js/places-provider.js" defer></script>
 <script src="../js/catalog-search.js" defer></script>
 
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button id="save-place-btn" class="btn-small">Добавить</button>
-            <button onclick="closeAddPlaceModal()" class="btn-small" style="background:#7a6656;">Отмена</button>
-        </div>
+        
         <div id="add-place-message" class="message" style="margin-top:10px;"></div>
     </div>
 </div>

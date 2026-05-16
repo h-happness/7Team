@@ -64,12 +64,39 @@
 
   async function addReview(placeId, userId, text, rating) {
     const res = await fetch(`${API_BASE}/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ placeId, userId, text, rating })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeId, userId, text, rating })
     });
+    if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Ошибка отправки');
+    }
     return await res.json();
-  }
+    }
+    async function addFavorite(placeId, email) {
+        const res = await fetch(`${API_BASE}/favorites/add?email=${encodeURIComponent(email)}&placeId=${placeId}`, {
+            method: 'POST'
+        });
+        return await res.text();
+    }
 
-  window.TravaPlacesProvider = { search, listCountries, listCities, getReviews, addReview, getPlaceById };
+    async function removeFavorite(placeId, email) {
+        const res = await fetch(`${API_BASE}/favorites/remove?email=${encodeURIComponent(email)}&placeId=${placeId}`, {
+            method: 'DELETE'
+        });
+        return await res.text();
+    }
+
+    async function getFavoriteIds(email) {
+        const res = await fetch(`${API_BASE}/favorites/ids?email=${encodeURIComponent(email)}`);
+        return await res.json();
+    }
+
+    async function getFavorites(email) {
+        const res = await fetch(`${API_BASE}/favorites?email=${encodeURIComponent(email)}`);
+        return await res.json();
+    }
+
+  window.TravaPlacesProvider = { search, listCountries, listCities, getReviews, addReview, getPlaceById, addFavorite, removeFavorite, getFavoriteIds, getFavorites };
 })();
