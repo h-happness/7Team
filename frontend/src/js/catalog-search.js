@@ -430,7 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('save-place-btn')?.addEventListener('click', async () => {
+    document.getElementById('add-place-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault(); // блокируем стандартную отправку формы
         const email = localStorage.getItem('trava_email');
         const name = document.getElementById('new-place-name').value.trim();
         const desc = document.getElementById('new-place-desc').value.trim();
