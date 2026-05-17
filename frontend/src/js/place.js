@@ -2,6 +2,18 @@
 (() => {
     const API_BASE = 'http://localhost:8080';
 
+    async function checkAdminRole() {
+    const email = localStorage.getItem('trava_email');
+    if (!email) { window._isAdmin = false; return; }
+    try {
+        const res = await fetch(`${API_BASE}/profile?email=${encodeURIComponent(email)}`);
+        const profile = await res.json();
+        window._isAdmin = profile.role === 'ADMIN';
+    } catch {
+        window._isAdmin = false;
+    }
+}
+
     function escapeHtml(s) {
         return String(s || '')
             .replace(/&/g, '&amp;')
@@ -133,6 +145,7 @@
     const container = document.getElementById('place-container');
 
     async function loadPlaceDetail() {
+        await checkAdminRole();
         if (!placeId) {
             container.innerHTML = '<div class="error">Не указан ID места</div>';
             return;
@@ -390,22 +403,39 @@
     };
 
     // Функция удаления отзыва (для админов)
-    window.deleteReview = async function(reviewId, placeId) {
-        if (!confirm('Вы уверены, что хотите удалить этот отзыв?')) return;
+   window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').style.display = 'none';
+};
 
+function showConfirmModal(text, onConfirm) {
+    document.getElementById('confirm-text').textContent = text;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    const btn = document.getElementById('confirm-yes');
+    btn.onclick = () => {
+        closeConfirmModal();
+        onConfirm();
+    };
+}
 
+window.deleteReview = async function(reviewId, placeId) {
+    const email = localStorage.getItem('trava_email');
+    showConfirmModal('Удалить этот отзыв?', async () => {
         try {
-            await fetch(`${API_BASE}/reviews/${reviewId}`, {
+            const res = await fetch(`${API_BASE}/admin/review/${reviewId}?adminEmail=${encodeURIComponent(email)}`, {
                 method: 'DELETE'
             });
+            if (!res.ok) {
+                showNotification('Нет прав для удаления', 'error');
+                return;
+            }
             showNotification('Отзыв удалён', 'success');
             await loadReviews(placeId);
             await updatePlaceRating(placeId);
         } catch (error) {
-            console.error('Ошибка удаления отзыва:', error);
             showNotification('Не удалось удалить отзыв', 'error');
         }
-    };
+    });
+};
 
     loadPlaceDetail();
 })();

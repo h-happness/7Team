@@ -53,12 +53,12 @@ public class AuthController {
         }
 
         User user = userRepository.findByEmail(resolvedEmail.trim())
-                .orElseThrow(() -> new RuntimeException("РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј email РЅРµ РЅР°Р№РґРµРЅ"));
+                .orElseThrow(() -> new RuntimeException("Пользователь с таким email не найден"));
 
         if (passwordEncoder.matches(resolvedPassword.trim(), user.getPassword())) {
-            return "РђРІС‚РѕСЂРёР·Р°С†РёСЏ РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ";
+            return "Авторизация прошла успешно";
         } else {
-            throw new RuntimeException("РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ");
+            throw new RuntimeException("Неверный пароль");
         }
     }
 

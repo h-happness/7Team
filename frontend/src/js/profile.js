@@ -145,7 +145,7 @@ loadFavorites();
     updateInterests();
     load();
 
-    $('user-search-btn')?.addEventListener('click', () => {
+   $('user-search')?.addEventListener('input', () => {
     const q = ($('user-search').value || '').trim().toLowerCase();
     if (!q) {
         renderUsersList($('user-list'), allProfiles, email);
