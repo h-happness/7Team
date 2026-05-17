@@ -1,35 +1,36 @@
 (() => {
-  const TYPE_LABEL = {
-    ATTRACTION: 'Достопримечательность',
-    RESTAURANT: 'Ресторан',
-    HOTEL: 'Отель',
-  };
+    const TYPE_LABEL = {
+        ATTRACTION: 'Достопримечательность',
+        RESTAURANT: 'Ресторан',
+        HOTEL: 'Отель',
+    };
 
-  function $(id) { return document.getElementById(id); }
-
-  function escapeHtml(s) {
-    return String(s || '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function starString(rating) {
-    const r = Number(rating || 0);
-    const full = Math.min(5, Math.floor(r));
-    const empty = 5 - full;
-    return '★'.repeat(full) + '☆'.repeat(empty);
-  }
-
-  function renderReviews(reviews, placeId) {
-    const currentEmail = localStorage.getItem('trava_email');
-    const isAdmin = window._isAdmin === true;
-
-    
-
-    if (!reviews || reviews.length === 0) {
-      return '<div class="muted" style="padding:10px">Отзывов пока нет</div>';
+    function $(id) {
+        return document.getElementById(id);
     }
-    return reviews.map(r => `
+
+    function escapeHtml(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function starString(rating) {
+        const r = Number(rating || 0);
+        const full = Math.min(5, Math.floor(r));
+        const empty = 5 - full;
+        return '★'.repeat(full) + '☆'.repeat(empty);
+    }
+
+    function renderReviews(reviews, placeId) {
+        const currentEmail = localStorage.getItem('trava_email');
+        const isAdmin = window._isAdmin === true;
+
+
+        if (!reviews || reviews.length === 0) {
+            return '<div class="muted" style="padding:10px">Отзывов пока нет</div>';
+        }
+        return reviews.map(r => `
       <div class="comment" style="margin:8px 0; padding:10px; border:1px solid #e8d5c4; border-radius:8px; background:#fffdfb; position:relative;">
         <div style="font-size:12px; color:#7a6656; margin-bottom:4px;">
           ${escapeHtml(r.user?.displayName || r.user?.email || 'Пользователь')} • 
@@ -39,16 +40,16 @@
         <div>${escapeHtml(r.text || '')}</div>
       </div>
     `).join('');
-}
+    }
 
-  function getReviewFormHtml(placeId) {
-    const email = localStorage.getItem('trava_email');
-    if (!email) {
-      return `<div class="muted" style="padding:10px">
+    function getReviewFormHtml(placeId) {
+        const email = localStorage.getItem('trava_email');
+        if (!email) {
+            return `<div class="muted" style="padding:10px">
         <a href="login.html" style="color:#492308">Войдите</a> чтобы оставить отзыв
       </div>`;
-    }
-    return `
+        }
+        return `
       <div style="margin-top:12px;">
         <div style="margin-bottom:8px;">
           <label style="font-weight:600; color:#4a3220;">Оценка:</label>
@@ -68,44 +69,44 @@
         <div id="review-msg-${placeId}" style="margin-top:6px; font-size:13px;"></div>
       </div>
     `;
-}
+    }
 
     function renderCard(place) {
         const imgSrc = place.image || '../../img/main/world.png';
         const email = localStorage.getItem('trava_email');
+        const isFavorite = (window._favoriteIds || []).map(Number).includes(Number(place.id));
+
         return `
     <div class="card" id="place-card-${place.id}">
-        
-        <div class="card-images single">
-          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(place.name)}">
+      <div class="card-images single">
+        <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(place.name)}">
+      </div>
+      <button class="favorite-btn" onclick="toggleFavorite(${place.id})" 
+        id="fav-btn-${place.id}">
+        ${window._favoriteIds?.includes(place.id) ? '❤️' : '🤍'}
+       </button>
+      <div class="card-content" style="cursor:pointer">
+        <a href="place.html?id=${place.id}" style="text-decoration:none; color:inherit;">
+          <h2>${escapeHtml(place.name)}</h2>
+        </a>
+        <div class="meta">
+          <span class="pill">${escapeHtml(place.country)}${place.city ? ', ' + escapeHtml(place.city) : ''}</span>
+          <span class="pill">${escapeHtml(TYPE_LABEL[place.type] || place.type)}</span>
+          <span class="pill">Рейтинг: ${place.rating} ${starString(place.rating)}</span>
         </div>
-        <div class="card-content" style="cursor:pointer">
-            <a href="place.html?id=${place.id}" style="text-decoration:none; color:inherit;">
-                <h2>${escapeHtml(place.name)}</h2>
-            </a>
-          <div class="meta">
-            <span class="pill">${escapeHtml(place.country)}${place.city ? ', ' + escapeHtml(place.city) : ''}</span>
-            <span class="pill">${escapeHtml(TYPE_LABEL[place.type] || place.type)}</span>
-            <span class="pill">Рейтинг: ${place.rating} ${starString(place.rating)}</span>
-          </div>
-          <p>${escapeHtml(place.description || '')}</p>
-          
-            <button onclick="toggleReviews(${place.id}); event.stopPropagation()"
-                    style="background:none; border:none; color:#492308; font-size:13px; cursor:pointer; text-decoration:underline;">
-              Нажмите чтобы посмотреть отзывы ▼
-            </button>
-            <button onclick="toggleFavorite(${place.id})" 
-            id="fav-btn-${place.id}"
-            style="background:none; border:none; font-size:20px; cursor:pointer; padding:4px;">
-            ${window._favoriteIds?.includes(place.id) ? '❤️' : '🤍'}
-            </button>
-          ${window._isAdmin && place.userAdded ? `
-            <button onclick="deletePlace(${place.id})"
-              class="action-btn action-btn--danger"
-              style="margin-top:8px;">
-              Удалить место
-            </button>` : ''}
-        </div>
+        <p>${escapeHtml(place.description || '')}</p>
+
+        <button onclick="toggleReviews(${place.id}); event.stopPropagation()"
+                style="background:none; border:none; color:#492308; font-size:13px; cursor:pointer; text-decoration:underline;">
+          Нажмите чтобы посмотреть отзывы ▼
+        </button>
+        ${window._isAdmin && place.userAdded ? `
+          <button onclick="deletePlace(${place.id})"
+            class="action-btn action-btn--danger"
+            style="margin-top:8px;">
+            Удалить место
+          </button>` : ''}
+      </div>
       <div id="reviews-${place.id}" style="display:none; padding:16px; border-top:1px solid #e8d5c4;">
         <h3 style="color:#643411; margin-bottom:10px;">Отзывы</h3>
         <div id="reviews-list-${place.id}">Загрузка...</div>
@@ -117,289 +118,322 @@
     }
 
 
-  function renderResults(container, items) {
-      if (!items || items.length === 0) {
-          container.innerHTML = `<div class="empty"><p>🔍 Ничего не найдено.</p></div>`;
-          return;
-      }
-      if (items.length === 1) {
-          container.classList.add('single-card');
-      } else {
-          container.classList.remove('single-card');
-      }
-      container.innerHTML = items.map(renderCard).join('');
-    }
-
-  // Глобальные функции для onclick
-  window.toggleReviews = async function(placeId) {
-    const block = document.getElementById(`reviews-${placeId}`);
-    if (!block) return;
-
-    const isOpen = block.style.display !== 'none';
-
-  
-    // Закрываем все открытые блоки
-    document.querySelectorAll('[id^="reviews-"]:not([id^="reviews-list-"]):not([id^="reviews-msg-"])').forEach(el => {
-        el.style.display = 'none';
-    });
-
-    // Если блок был закрыт — открываем его
-    if (!isOpen) {
-        block.style.display = 'block';
-        const list = document.getElementById(`reviews-list-${placeId}`);
-        try {
-            const reviews = await window.TravaPlacesProvider.getReviews(placeId);
-            list.innerHTML = renderReviews(reviews, placeId);
-        } catch {
-            list.innerHTML = '<div class="muted">Не удалось загрузить отзывы</div>';
+    function renderResults(container, items) {
+        if (!items || items.length === 0) {
+            container.innerHTML = `<div class="empty"><p>🔍 Ничего не найдено.</p></div>`;
+            return;
         }
-    }
-};
-
-  window.submitReview = async function(placeId) {
-    console.log('submitReview called', placeId); // добавь эту строку
-    const email = localStorage.getItem('trava_email');
-    
-    if (!email) return;
-
-    const text = document.getElementById(`review-text-${placeId}`)?.value?.trim();
-    const rating = Number(document.getElementById(`review-rating-${placeId}`)?.value);
-    const msg = document.getElementById(`review-msg-${placeId}`);
-
-    if (!text) {
-      msg.textContent = 'Напишите текст отзыва';
-      msg.style.color = '#c62828';
-      return;
+        if (items.length === 1) {
+            container.classList.add('single-card');
+        } else {
+            container.classList.remove('single-card');
+        }
+        container.innerHTML = items.map(renderCard).join('');
     }
 
-    try {
-      const profileRes = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
-      const profile = await profileRes.json();
+    // Глобальные функции для onclick
+    window.toggleReviews = async function (placeId) {
+        const block = document.getElementById(`reviews-${placeId}`);
+        if (!block) return;
 
-      console.log('profile:', profile); // добавь эту строку
+        const isOpen = block.style.display !== 'none';
 
-      await window.TravaPlacesProvider.addReview(placeId, profile.id, text, rating);
 
-      const list = document.getElementById(`reviews-list-${placeId}`);
-      const reviews = await window.TravaPlacesProvider.getReviews(placeId);
-      
-      console.log('reviews:', reviews);
-      
-      list.innerHTML = renderReviews(reviews, placeId);
+        // Закрываем все открытые блоки
+        document.querySelectorAll('[id^="reviews-"]:not([id^="reviews-list-"]):not([id^="reviews-msg-"])').forEach(el => {
+            el.style.display = 'none';
+        });
 
-      const placeRes = await fetch(`http://localhost:8080/places/${placeId}`);
-      const placeData = await placeRes.json();
-      const ratingPill = document.querySelector(`#place-card-${placeId} .pill:nth-child(3)`);
-      if (ratingPill) {
-          ratingPill.textContent = `Рейтинг: ${placeData.place.rating} ${starString(placeData.place.rating)}`;
-      }
-
-      document.getElementById(`review-text-${placeId}`).value = '';
-      msg.textContent = 'Отзыв добавлен!';
-      msg.style.color = '#2e7d32';
-    } catch(e) {
-    console.log('error:', e);
-    msg.textContent = e.message || 'Ошибка отправки';
-    msg.style.color = '#c62828';
-}
-};
-
-  async function setCityOptions(provider) {
-    const country = $('country').value || '';
-    const cities = await provider.listCities(country);
-    const citySelect = $('city');
-    citySelect.innerHTML = '<option value="">Любой</option>';
-    cities.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c;
-      opt.textContent = c;
-      citySelect.appendChild(opt);
-    });
-    citySelect.disabled = cities.length === 0;
-  }
-
-  function debounce(fn, ms) {
-    let t = null;
-    return (...args) => {
-      if (t) clearTimeout(t);
-      t = setTimeout(() => fn(...args), ms);
+        // Если блок был закрыт — открываем его
+        if (!isOpen) {
+            block.style.display = 'block';
+            const list = document.getElementById(`reviews-list-${placeId}`);
+            try {
+                const reviews = await window.TravaPlacesProvider.getReviews(placeId);
+                list.innerHTML = renderReviews(reviews, placeId);
+            } catch {
+                list.innerHTML = '<div class="muted">Не удалось загрузить отзывы</div>';
+            }
+        }
     };
-  }
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    await checkAdminRole(); 
-    const email = localStorage.getItem('trava_email');
-    if (email) {
+    window.submitReview = async function (placeId) {
+        console.log('submitReview called', placeId); // добавь эту строку
+        const email = localStorage.getItem('trava_email');
+
+        if (!email) return;
+
+        const text = document.getElementById(`review-text-${placeId}`)?.value?.trim();
+        const rating = Number(document.getElementById(`review-rating-${placeId}`)?.value);
+        const msg = document.getElementById(`review-msg-${placeId}`);
+
+        if (!text) {
+            msg.textContent = 'Напишите текст отзыва';
+            msg.style.color = '#c62828';
+            return;
+        }
+
         try {
-            window._favoriteIds = await window.TravaPlacesProvider.getFavoriteIds(email);
-        } catch {
+            const profileRes = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
+            const profile = await profileRes.json();
+
+            console.log('profile:', profile); // добавь эту строку
+
+            await window.TravaPlacesProvider.addReview(placeId, profile.id, text, rating);
+
+            const list = document.getElementById(`reviews-list-${placeId}`);
+            const reviews = await window.TravaPlacesProvider.getReviews(placeId);
+
+            console.log('reviews:', reviews);
+
+            list.innerHTML = renderReviews(reviews, placeId);
+
+            const placeRes = await fetch(`http://localhost:8080/places/${placeId}`);
+            const placeData = await placeRes.json();
+            const ratingPill = document.querySelector(`#place-card-${placeId} .pill:nth-child(3)`);
+            if (ratingPill) {
+                ratingPill.textContent = `Рейтинг: ${placeData.place.rating} ${starString(placeData.place.rating)}`;
+            }
+
+            document.getElementById(`review-text-${placeId}`).value = '';
+            msg.textContent = 'Отзыв добавлен!';
+            msg.style.color = '#2e7d32';
+        } catch (e) {
+            console.log('error:', e);
+            msg.textContent = e.message || 'Ошибка отправки';
+            msg.style.color = '#c62828';
+        }
+    };
+
+    async function setCityOptions(provider) {
+        const country = $('country').value || '';
+        const cities = await provider.listCities(country);
+        const citySelect = $('city');
+        citySelect.innerHTML = '<option value="">Любой</option>';
+        cities.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            citySelect.appendChild(opt);
+        });
+        citySelect.disabled = cities.length === 0;
+    }
+
+    function debounce(fn, ms) {
+        let t = null;
+        return (...args) => {
+            if (t) clearTimeout(t);
+            t = setTimeout(() => fn(...args), ms);
+        };
+    }
+
+    document.getElementById('open-filters-btn').addEventListener('click', function () {
+        const filtersContainer = document.getElementById('filters');
+        const isHidden = filtersContainer.style.display === 'none' || !filtersContainer.style.display;
+
+        if (isHidden) {
+            filtersContainer.style.display = 'block';
+            this.textContent = 'Скрыть фильтры';
+        } else {
+            filtersContainer.style.display = 'none';
+            this.textContent = 'Фильтры ⚙️';
+        }
+    });
+
+    document.getElementById('reset').addEventListener('click', function () {
+        // Очищаем все поля фильтров
+        document.querySelectorAll('.filter input, .filter select').forEach(el => {
+            if (el.type === 'checkbox') {
+                el.checked = false;
+            } else {
+                el.value = '';
+            }
+        });
+
+        // Обновляем город (сбрасываем и отключаем)
+        const citySelect = document.getElementById('city');
+        citySelect.innerHTML = '<option value="">Любой</option>';
+        citySelect.disabled = true;
+
+        // Запускаем поиск с очищенными параметрами
+        runSearch();
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await checkAdminRole();
+        const email = localStorage.getItem('trava_email');
+
+        if (email) {
+            try {
+                window._favoriteIds = await window.TravaPlacesProvider.getFavoriteIds(email);
+            } catch {
+                window._favoriteIds = [];
+            }
+        } else {
             window._favoriteIds = [];
         }
-    } else {
-        window._favoriteIds = [];
-    }
 
-    const provider = window.TravaPlacesProvider;
-    if (!provider) return;
+        const provider = window.TravaPlacesProvider;
+        if (!provider) return;
 
-    const resultsEl = $('results');
+        const resultsEl = $('results');
 
-    // Загружаем страны с бэкенда
-    const countries = await provider.listCountries();
-    countries.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c;
-      opt.textContent = c;
-      $('country').appendChild(opt);
-    });
+        // Загружаем страны с бэкенда
+        const countries = await provider.listCountries();
+        countries.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            $('country').appendChild(opt);
+        });
 
-    await setCityOptions(provider);
-    // Применяем параметры из URL
-    const params = new URLSearchParams(window.location.search);
-    const typeParam = params.get('type');
-    const countryParam = params.get('country');
-
-    if (countryParam) {
-        const countrySelect = $('country');
-        for (let opt of countrySelect.options) {
-            if (opt.value.toLowerCase() === countryParam.toLowerCase()) {
-                opt.selected = true;
-                break;
-            }
-        }
         await setCityOptions(provider);
-    }
+        // Применяем параметры из URL
+        const params = new URLSearchParams(window.location.search);
+        const typeParam = params.get('type');
+        const countryParam = params.get('country');
 
-    if (typeParam) {
-        const typeSelect = $('type');
-        for (let opt of typeSelect.options) {
-            if (opt.value.toLowerCase() === typeParam.toLowerCase()) {
-                opt.selected = true;
-                break;
+        if (countryParam) {
+            const countrySelect = $('country');
+            for (let opt of countrySelect.options) {
+                if (opt.value.toLowerCase() === countryParam.toLowerCase()) {
+                    opt.selected = true;
+                    break;
+                }
+            }
+            await setCityOptions(provider);
+        }
+
+        if (typeParam) {
+            const typeSelect = $('type');
+            for (let opt of typeSelect.options) {
+                if (opt.value.toLowerCase() === typeParam.toLowerCase()) {
+                    opt.selected = true;
+                    break;
+                }
             }
         }
-}
 
-    const runSearch = async () => {
-    const f = {
-        q: $('q').value || '',
-        country: $('country').value || '',
-        city: $('city').value || '',
-        type: $('type').value || '',
-        minRating: $('rating').value || '',
-    };
-    let items = await provider.search(f);
+        const runSearch = async () => {
+            const f = {
+                q: $('q').value || '',
+                country: $('country').value || '',
+                city: $('city').value || '',
+                type: $('type').value || '',
+                minRating: $('rating').value || '',
+            };
+            let items = await provider.search(f);
 
-    // Фильтр избранного
-   const favOnly = document.getElementById('favorites-only')?.checked;
-if (favOnly) {
-    const favIds = (window._favoriteIds || []).map(Number);
-    items = items.filter(p => favIds.includes(Number(p.id)));
-}
-
-    renderResults(resultsEl, items);
-};
-
-    const runSearchDebounced = debounce(runSearch, 300);
-
-    $('q').addEventListener('input', runSearchDebounced);
-    $('type').addEventListener('change', runSearch);
-    $('rating').addEventListener('change', runSearch);
-    $('country').addEventListener('change', async () => {
-      await setCityOptions(provider);
-      $('city').value = '';
-      runSearch();
-    });
-    $('city').addEventListener('change', runSearch);
-    $('reset').addEventListener('click', async () => {
-      $('q').value = '';
-      $('country').value = '';
-      $('type').value = '';
-      $('rating').value = '';
-      await setCityOptions(provider);
-      $('city').value = '';
-      runSearch();
-    });
-    document.getElementById('favorites-only')?.addEventListener('change', runSearch);
-
-
-    window._runSearch = runSearch;
-    runSearch();
-
-    
-  });
-  // Проверяем роль при загрузке
-async function checkAdminRole() {
-    const email = localStorage.getItem('trava_email');
-    if (!email) {
-        window._isAdmin = false;
-        return;
-    }
-    try {
-        const res = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
-        const profile = await res.json();
-        window._isAdmin = profile.role === 'ADMIN';
-    } catch {
-        window._isAdmin = false;
-    }
-}
-
-window.deleteReview = async function(reviewId, placeId) {
-    const email = localStorage.getItem('trava_email');
-    showConfirmModal('Удалить этот отзыв?', async () => {
-        try {
-            await fetch(`http://localhost:8080/admin/review/${reviewId}?adminEmail=${encodeURIComponent(email)}`, {
-                method: 'DELETE'
-            });
-            const list = document.getElementById(`reviews-list-${Number(placeId)}`);
-            const reviews = await window.TravaPlacesProvider.getReviews(Number(placeId));
-            list.innerHTML = renderReviews(reviews, Number(placeId));
-        } catch(e) {
-            alert('Ошибка удаления');
-        }
-    });
-};
-
-window.deletePlace = async function(placeId) {
-    const email = localStorage.getItem('trava_email');
-    showConfirmModal('Удалить это место?', async () => {
-        try {
-            const res = await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
-                method: 'DELETE'
-            });
-            const text = await res.text();
-            if (!res.ok) {
-                alert(text || 'Ошибка удаления');
-                return;
+            // Фильтр избранного
+            const favOnly = document.getElementById('favorites-only')?.checked;
+            if (favOnly) {
+                const favIds = (window._favoriteIds || []).map(Number);
+                items = items.filter(p => favIds.includes(Number(p.id)));
             }
-            document.getElementById(`place-card-${placeId}`).remove();
+
+            renderResults(resultsEl, items);
+        };
+
+        const runSearchDebounced = debounce(runSearch, 300);
+
+        $('q').addEventListener('input', runSearchDebounced);
+        $('type').addEventListener('change', runSearch);
+        $('rating').addEventListener('change', runSearch);
+        $('country').addEventListener('change', async () => {
+            await setCityOptions(provider);
+            $('city').value = '';
+            runSearch();
+        });
+        $('city').addEventListener('change', runSearch);
+        $('reset').addEventListener('click', async () => {
+            $('q').value = '';
+            $('country').value = '';
+            $('type').value = '';
+            $('rating').value = '';
+            await setCityOptions(provider);
+            $('city').value = '';
+            runSearch();
+        });
+        document.getElementById('favorites-only')?.addEventListener('change', runSearch);
+
+
+        window._runSearch = runSearch;
+        runSearch();
+
+
+    });
+
+    // Проверяем роль при загрузке
+    async function checkAdminRole() {
+        const email = localStorage.getItem('trava_email');
+        if (!email) {
+            window._isAdmin = false;
+            return;
+        }
+        try {
+            const res = await fetch(`http://localhost:8080/profile?email=${encodeURIComponent(email)}`);
+            const profile = await res.json();
+            window._isAdmin = profile.role === 'ADMIN';
         } catch {
-            alert('Ошибка удаления');
+            window._isAdmin = false;
         }
-    });
-};
+    }
+
+    window.deleteReview = async function (reviewId, placeId) {
+        const email = localStorage.getItem('trava_email');
+        showConfirmModal('Удалить этот отзыв?', async () => {
+            try {
+                await fetch(`http://localhost:8080/admin/review/${reviewId}?adminEmail=${encodeURIComponent(email)}`, {
+                    method: 'DELETE'
+                });
+                const list = document.getElementById(`reviews-list-${Number(placeId)}`);
+                const reviews = await window.TravaPlacesProvider.getReviews(Number(placeId));
+                list.innerHTML = renderReviews(reviews, Number(placeId));
+            } catch (e) {
+                alert('Ошибка удаления');
+            }
+        });
+    };
+
+    window.deletePlace = async function (placeId) {
+        const email = localStorage.getItem('trava_email');
+        showConfirmModal('Удалить это место?', async () => {
+            try {
+                const res = await fetch(`http://localhost:8080/admin/place/${placeId}?adminEmail=${encodeURIComponent(email)}`, {
+                    method: 'DELETE'
+                });
+                const text = await res.text();
+                if (!res.ok) {
+                    alert(text || 'Ошибка удаления');
+                    return;
+                }
+                document.getElementById(`place-card-${placeId}`).remove();
+            } catch {
+                alert('Ошибка удаления');
+            }
+        });
+    };
 
 
-window.openAddPlaceModal = function() {
-    const modal = document.getElementById('add-place-modal');
-    modal.classList.add('show');
-};
+    window.openAddPlaceModal = function () {
+        const modal = document.getElementById('add-place-modal');
+        modal.classList.add('show');
+    };
 
-window.closeAddPlaceModal = function() {
-    const modal = document.getElementById('add-place-modal');
-    modal.classList.remove('show');
-    document.getElementById('add-place-message').textContent = '';
-    document.getElementById('new-place-name').value = '';
-    document.getElementById('new-place-desc').value = '';
-    document.getElementById('new-place-country').value = '';
-    document.getElementById('new-place-city').value = '';
-    document.getElementById('new-place-preview').innerHTML = '';
-    document.getElementById('new-place-file-name').textContent = '';
-};
+    window.closeAddPlaceModal = function () {
+        const modal = document.getElementById('add-place-modal');
+        modal.classList.remove('show');
+        document.getElementById('add-place-message').textContent = '';
+        document.getElementById('new-place-name').value = '';
+        document.getElementById('new-place-desc').value = '';
+        document.getElementById('new-place-country').value = '';
+        document.getElementById('new-place-city').value = '';
+        document.getElementById('new-place-preview').innerHTML = '';
+        document.getElementById('new-place-file-name').textContent = '';
+    };
 
 
-
-window._runSearch = null;
+    window._runSearch = null;
 
 })();
 
@@ -472,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('http://localhost:8080/places', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     name, description: desc, country, city, type,
                     image: imageData, rating: 0, userAdded: true
@@ -487,14 +521,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAddPlaceModal();
                 if (window._runSearch) window._runSearch();
             }, 1000);
-        } catch(e) {
+        } catch (e) {
             msg.textContent = e.message || 'Ошибка добавления';
             msg.style.color = '#c62828';
         }
     });
-    
+
 });
-window.closeConfirmModal = function() {
+window.closeConfirmModal = function () {
     document.getElementById('confirm-modal').style.display = 'none';
 };
 
@@ -507,7 +541,8 @@ function showConfirmModal(text, onConfirm) {
         onConfirm();
     };
 }
-window.toggleFavorite = async function(placeId) {
+
+window.toggleFavorite = async function (placeId) {
     const email = localStorage.getItem('trava_email');
     if (!email) {
         const btn = document.getElementById(`fav-btn-${placeId}`);
